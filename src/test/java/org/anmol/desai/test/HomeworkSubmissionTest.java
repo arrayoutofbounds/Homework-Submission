@@ -8,6 +8,8 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
 
+import org.anmol.desai.domain.Answer;
+import org.anmol.desai.domain.Homework;
 import org.anmol.desai.domain.Student;
 import org.anmol.desai.domain.Teacher;
 import org.anmol.desai.domain.User;
@@ -24,19 +26,24 @@ public class HomeworkSubmissionTest extends JpaTest {
 	public void persistUser() {
 		_entityManager.getTransaction().begin();
 
-		User student = new Student();
-		student.setFirstName("Anmol");
-		student.setLastName("Desai");
+		User student = new Student("Anmol","Desai");
+
 
 
 		_logger.info("The student is persisted ");
 
-		User teacher = new Teacher();
-		teacher.setFirstName("Bapa");
-		teacher.setLastName("Bapa");
+		User teacher = new Teacher("Bapa","Bapa");
+		
+		java.util.Date d = new java.util.Date();
+		Homework hw = new Homework("title","year",d);
+		
+		Answer a = new Answer("content",student,hw);
+		
 
 		_entityManager.persist(student);
 		_entityManager.persist(teacher);
+		_entityManager.persist(hw);
+		_entityManager.persist(a);
 
 		_entityManager.getTransaction().commit();
 		

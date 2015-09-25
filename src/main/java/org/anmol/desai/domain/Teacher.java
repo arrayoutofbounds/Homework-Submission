@@ -9,7 +9,7 @@ public class Teacher extends User {
 	@Column(name="Type")
 	private String type = "Teacher";
 	
-	public Teacher(){}
+	protected Teacher(){}
 	
 	public Teacher(String firstName,String lastName){
 		super(firstName,lastName);
