@@ -1,5 +1,6 @@
 package org.anmol.desai.domain;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -15,7 +16,8 @@ import javax.persistence.OneToOne;
 public class Answer {
 	
 	@Id
-	@GeneratedValue(generator=DatabaseConstants.ID_GENERATOR)
+	//@GeneratedValue(generator=DatabaseConstants.ID_GENERATOR)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long _id;
 	
 	@Column(nullable = false) // this prevents the answer being stored from being empty, and occupying space in db.
@@ -25,7 +27,7 @@ public class Answer {
 	@JoinColumn(name="USER_ID",nullable=false)
 	protected User user;
 	
-	@OneToOne
+	@OneToOne (optional = false, cascade = CascadeType.PERSIST) // answer MUST have a homework assigned. When answer is saved, so is the question.
 	@JoinColumn(name="HOMEWORK_ID",nullable=false)
 	protected Homework hw;
 	
@@ -67,6 +69,10 @@ public class Answer {
 
 	public void setHw(Homework hw) {
 		this.hw = hw;
+	}
+
+	public User getUser() {
+		return user;
 	}
 	
 	

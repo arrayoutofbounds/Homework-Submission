@@ -1,12 +1,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	
-	
+
+
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.anmol.desai</groupId>
 	<artifactId>HomeworkSubmission</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	
+
 	<name>Homework</name>
 	<description>A homwork submission RESTful Web service.</description>
 
@@ -35,6 +35,25 @@
 			<groupId>org.jboss.resteasy</groupId>
 			<artifactId>resteasy-servlet-initializer</artifactId>
 			<version>3.0.9.Final</version>
+		</dependency>
+		
+		<!-- Required for JAXB. -->
+		<dependency>
+			<groupId>org.jboss.resteasy</groupId>
+			<artifactId>resteasy-jaxb-provider</artifactId>
+			<version>3.0.9.Final</version>
+
+			<!-- Dependency resteasy-jaxb-provider includes a (transitive) dependency 
+				on FastInfoset, which depends on jsr173.api. jsr173.api defines the javax.xml.bind 
+				package, that is now part of the standard JDK. jsr173 defines a class javax.xml.bind.XMLConstants 
+				that differs to the standard javax.xml.bind.XMLConstants class. This project 
+				requires the standard class, hence this exclusion. -->
+			<exclusions>
+				<exclusion>
+					<artifactId>FastInfoset</artifactId>
+					<groupId>com.sun.xml.fastinfoset</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
 		<!-- Joda date/time library -->
@@ -67,6 +86,7 @@
 			<artifactId>hibernate-validator</artifactId>
 			<version>5.0.3.Final</version>
 		</dependency>
+		
 
 		<!-- Logging -->
 		<dependency>
@@ -78,6 +98,13 @@
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-log4j12</artifactId>
 			<version>1.7.12</version>
+		</dependency>
+		
+		<!-- apache for equals builder in dto -->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.4</version>
 		</dependency>
 	</dependencies>
 

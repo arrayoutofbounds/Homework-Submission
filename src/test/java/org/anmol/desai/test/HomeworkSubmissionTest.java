@@ -13,15 +13,29 @@ import org.anmol.desai.domain.Homework;
 import org.anmol.desai.domain.Student;
 import org.anmol.desai.domain.Teacher;
 import org.anmol.desai.domain.User;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-public class HomeworkSubmissionTest extends JpaTest {
+public class HomeworkSubmissionTest  {
 
 	private Logger _logger = LoggerFactory.getLogger(HomeworkSubmissionTest.class);
+	
+	private static final String WEB_SERVICE_URI = "http://localhost:8080/services/hwsubmission";
+	
+	private static Client _client;
 
+	/**
+	 * One-time setup method that creates a Web service client.
+	 */
+	@BeforeClass
+	public static void setUpClient() {
+		_client = ClientBuilder.newClient();
+	}
+	
+	/*
 	@Test
 	public void persistEntitiesToDb() {
 		_entityManager.getTransaction().begin();
@@ -53,30 +67,18 @@ public class HomeworkSubmissionTest extends JpaTest {
 		
 
 
-		/*
-		 * This is a test that gets the collection from the user and then returns the answer body.
-		 * 
-		int size = student.getAnswers().size();
-		
-		_logger.info("size is " + size);
-		
-		for(Answer a2: student.getAnswers() ){
-			_logger.info("answer is " + a2.getBody());
-		}
-		
-		*/
-		
-		int size = hw.getUsersAssigned().size();
-		
-		_logger.info("size is " + size);
-		
-		for(User u: hw.getUsersAssigned() ){
-			_logger.info("answer is " + u.getFirstName());
-		}
-
-		//_entityManager.persist(a);
 
 		_entityManager.getTransaction().commit();
+		
+		
+	}
+	*/
+	
+	@Test
+	public void queryAnswer(){
+		Answer answer = _client.target(WEB_SERVICE_URI + "/1").request().accept("application/xml").get(Answer.class);
+		
+		_logger.info("Answer is " + answer.getBody());
 		
 	}
 	
@@ -84,3 +86,29 @@ public class HomeworkSubmissionTest extends JpaTest {
 	
 
 }
+
+
+/*
+ * This is a test that gets the collection from the user and then returns the answer body.
+ * 
+int size = student.getAnswers().size();
+
+_logger.info("size is " + size);
+
+for(Answer a2: student.getAnswers() ){
+	_logger.info("answer is " + a2.getBody());
+}
+
+*/
+
+/*
+int size = hw.getUsersAssigned().size();
+
+_logger.info("size is " + size);
+
+for(User u: hw.getUsersAssigned() ){
+	_logger.info("answer is " + u.getFirstName());
+}
+
+*/
+//_entityManager.persist(a);

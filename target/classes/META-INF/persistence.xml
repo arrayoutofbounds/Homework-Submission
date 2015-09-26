@@ -21,6 +21,8 @@
    <property name="hibernate.connection.username" value ="sa" />
    <property name="hibernate.connection.password" value = "sa" />
    
+
+   
    <!-- When set to true, hibernate.show_sql prints, to stdout, the SQL that it
         executes. This is useful during development and debugging. -->
    <property name="hibernate.show_sql" value="false" />

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite failures="0" time="0.11" errors="0" skipped="0" tests="1" name="org.anmol.desai.test.HomeworkSubmissionTest">
+<testsuite failures="0" time="0.287" errors="1" skipped="0" tests="1" name="org.anmol.desai.test.HomeworkSubmissionTest">
   <properties>
+    <property name="jboss.i18n.generate-proxies" value="true"/>
     <property name="java.runtime.name" value="OpenJDK Runtime Environment"/>
     <property name="sun.boot.library.path" value="/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/amd64"/>
     <property name="java.vm.version" value="24.79-b02"/>
@@ -25,7 +26,7 @@
 "/>
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
     <property name="os.name" value="Linux"/>
-    <property name="classworlds.conf" value="/home/anmol/Desktop/sem2_2015/325/325_projects/.metadata/.plugins/org.eclipse.m2e.launching/launches/m2conf1481904670642974232.tmp"/>
+    <property name="classworlds.conf" value="/home/anmol/Desktop/sem2_2015/325/325_projects/.metadata/.plugins/org.eclipse.m2e.launching/launches/m2conf455644336198702936.tmp"/>
     <property name="sun.jnu.encoding" value="UTF-8"/>
     <property name="java.library.path" value="/usr/java/packages/lib/amd64:/usr/lib/x86_64-linux-gnu/jni:/lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu:/usr/lib/jni:/lib:/usr/lib"/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
@@ -35,8 +36,8 @@
     <property name="user.home" value="/home/anmol"/>
     <property name="user.timezone" value="Pacific/Auckland"/>
     <property name="java.awt.printerjob" value="sun.print.PSPrinterJob"/>
-    <property name="file.encoding" value="UTF-8"/>
     <property name="java.specification.version" value="1.7"/>
+    <property name="file.encoding" value="UTF-8"/>
     <property name="user.name" value="anmol"/>
     <property name="java.class.path" value="/home/anmol/Desktop/eclipse/plugins/org.eclipse.m2e.maven.runtime_1.6.0.20150526-2031/jars/plexus-classworlds-2.5.2.jar"/>
     <property name="java.vm.specification.version" value="1.7"/>
@@ -60,5 +61,43 @@
     <property name="sun.desktop" value="gnome"/>
     <property name="sun.cpu.isalist" value=""/>
   </properties>
-  <testcase time="0.11" classname="org.anmol.desai.test.HomeworkSubmissionTest" name="persistEntitiesToDb"/>
+  <testcase time="0.287" classname="org.anmol.desai.test.HomeworkSubmissionTest" name="queryAnswer">
+    <error message="HTTP 500 Internal Server Error" type="javax.ws.rs.InternalServerErrorException">javax.ws.rs.InternalServerErrorException: HTTP 500 Internal Server Error
+	at org.jboss.resteasy.client.jaxrs.internal.ClientInvocation.handleErrorStatus(ClientInvocation.java:189)
+	at org.jboss.resteasy.client.jaxrs.internal.ClientInvocation.extractResult(ClientInvocation.java:154)
+	at org.jboss.resteasy.client.jaxrs.internal.ClientInvocation.invoke(ClientInvocation.java:444)
+	at org.jboss.resteasy.client.jaxrs.internal.ClientInvocationBuilder.get(ClientInvocationBuilder.java:165)
+	at org.anmol.desai.test.HomeworkSubmissionTest.queryAnswer(HomeworkSubmissionTest.java:79)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:606)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:47)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:44)
+	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:271)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:70)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:50)
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:238)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:63)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:236)
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:53)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:229)
+	at org.junit.internal.runners.statements.RunBefores.evaluate(RunBefores.java:26)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:309)
+	at org.apache.maven.surefire.junit4.JUnit4Provider.execute(JUnit4Provider.java:252)
+	at org.apache.maven.surefire.junit4.JUnit4Provider.executeTestSet(JUnit4Provider.java:141)
+	at org.apache.maven.surefire.junit4.JUnit4Provider.invoke(JUnit4Provider.java:112)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:606)
+	at org.apache.maven.surefire.util.ReflectionUtils.invokeMethodWithArray(ReflectionUtils.java:189)
+	at org.apache.maven.surefire.booter.ProviderFactory$ProviderProxy.invoke(ProviderFactory.java:165)
+	at org.apache.maven.surefire.booter.ProviderFactory.invokeProvider(ProviderFactory.java:85)
+	at org.apache.maven.surefire.booter.ForkedBooter.runSuitesInProcess(ForkedBooter.java:115)
+	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:75)
+</error>
+  </testcase>
 </testsuite>
