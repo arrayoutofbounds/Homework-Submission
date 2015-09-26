@@ -23,7 +23,7 @@ public class HomeworkSubmissionTest extends JpaTest {
 	private Logger _logger = LoggerFactory.getLogger(HomeworkSubmissionTest.class);
 
 	@Test
-	public void persistUser() {
+	public void persistEntitiesToDb() {
 		_entityManager.getTransaction().begin();
 
 		User student = new Student("Anmol","Desai");
@@ -38,12 +38,20 @@ public class HomeworkSubmissionTest extends JpaTest {
 		java.util.Date d = new java.util.Date();
 		Homework hw = new Homework("title","year",d);
 		
+		// each student should be assigned a hw
+		student.addHomework(hw);
+		
+		// each homework has a list of assigned students
+		hw.addUser(student);
+		
+		Answer a = new Answer("content",student,hw);
+		student.addAnswer(a);
+		
 		_entityManager.persist(student);
 		_entityManager.persist(teacher);
 		_entityManager.persist(hw);
 		
-		Answer a = new Answer("content",student,hw);
-		student.addAnswer(a);
+
 
 		/*
 		 * This is a test that gets the collection from the user and then returns the answer body.
@@ -57,11 +65,22 @@ public class HomeworkSubmissionTest extends JpaTest {
 		}
 		
 		*/
+		
+		int size = hw.getUsersAssigned().size();
+		
+		_logger.info("size is " + size);
+		
+		for(User u: hw.getUsersAssigned() ){
+			_logger.info("answer is " + u.getFirstName());
+		}
 
 		//_entityManager.persist(a);
 
 		_entityManager.getTransaction().commit();
 		
 	}
+	
+	
+	
 
 }

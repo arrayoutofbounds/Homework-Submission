@@ -12,6 +12,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
 @Entity
@@ -28,8 +31,19 @@ public abstract class User {
 	@Column(nullable = false)
 	private String lastName;
 	
-	@OneToMany(mappedBy="user",fetch=FetchType.LAZY,cascade = CascadeType.PERSIST) // cascade means that if user is persisted then so is the answer that belongs to that user
+	// if the user is deleted then all the answers it had are also deleted. (makes sense if someone graduates their class, you can remove them from the user db and remove their answers)
+	@OneToMany(mappedBy="user",fetch=FetchType.LAZY,cascade = {CascadeType.PERSIST,CascadeType.REMOVE}) // cascade means that if user is persisted then so is the answer that belongs to that user
 	private List<Answer> answers = new ArrayList<Answer>();  // this has a list of answers and hence the user knows about all its answers.
+	
+	
+	// each user has a list of homeworks assigned to them
+	@ManyToMany(cascade = CascadeType.PERSIST)
+	@JoinTable(
+			name="Homwork_Assigned", 
+			joinColumns = @JoinColumn(name = "USER_ID"),
+			inverseJoinColumns = @JoinColumn(name="HOMEWORK_ID")
+	)
+	private List<Homework> homeworkAssigned = new ArrayList<Homework>(); 
 	
 	protected User(){}
 		
@@ -37,7 +51,20 @@ public abstract class User {
 		this.firstName = firstName;
 		this.lastName = lastName;
 	}
+	
 
+
+	public List<Homework> getHomeworkAssigned() {
+		return homeworkAssigned;
+	}
+
+	public void setHomeworkAssigned(List<Homework> homeworkAssigned) {
+		this.homeworkAssigned = homeworkAssigned;
+	}
+	
+	public void addHomework(Homework hw){
+		homeworkAssigned.add(hw);
+	}
 
 	public void addAnswer(Answer a){
 		answers.add(a);

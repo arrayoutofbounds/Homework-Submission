@@ -1,10 +1,14 @@
 package org.anmol.desai.domain;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -24,6 +28,11 @@ public class Homework {
 	@Temporal(TemporalType.DATE)
 	private java.util.Date duedate;
 	
+	 // each homework has a list of users it is assigned to 
+	@ManyToMany(mappedBy = "homeworkAssigned")
+	private List<User> usersAssigned = new ArrayList<User>();
+	
+
 	protected Homework(){}
 	
 	
@@ -32,8 +41,20 @@ public class Homework {
 		this.question = question;
 		this.duedate = duedate;
 	}
+	
+	public void addUser(User user){
+		usersAssigned.add(user); 
+	}
+	
+	public List<User> getUsersAssigned() {
+		return usersAssigned;
+	}
 
 
+	public void setUsersAssigned(List<User> usersAssigned) {
+		this.usersAssigned = usersAssigned;
+	}
+	
 	public Long get_id() {
 		return _id;
 	}
