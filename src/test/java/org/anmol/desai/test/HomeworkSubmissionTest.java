@@ -27,23 +27,38 @@ public class HomeworkSubmissionTest extends JpaTest {
 		_entityManager.getTransaction().begin();
 
 		User student = new Student("Anmol","Desai");
-
-
+		
 
 		_logger.info("The student is persisted ");
 
 		User teacher = new Teacher("Bapa","Bapa");
 		
+		_logger.info("The teacher is persisted ");
+		
 		java.util.Date d = new java.util.Date();
 		Homework hw = new Homework("title","year",d);
 		
-		Answer a = new Answer("content",student,hw);
-		
-
 		_entityManager.persist(student);
 		_entityManager.persist(teacher);
 		_entityManager.persist(hw);
-		_entityManager.persist(a);
+		
+		Answer a = new Answer("content",student,hw);
+		student.addAnswer(a);
+
+		/*
+		 * This is a test that gets the collection from the user and then returns the answer body.
+		 * 
+		int size = student.getAnswers().size();
+		
+		_logger.info("size is " + size);
+		
+		for(Answer a2: student.getAnswers() ){
+			_logger.info("answer is " + a2.getBody());
+		}
+		
+		*/
+
+		//_entityManager.persist(a);
 
 		_entityManager.getTransaction().commit();
 		

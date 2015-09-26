@@ -1,9 +1,12 @@
 package org.anmol.desai.domain;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
@@ -12,22 +15,25 @@ import javax.persistence.OneToOne;
 public class Answer {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(generator=DatabaseConstants.ID_GENERATOR)
 	private Long _id;
 	
+	@Column(nullable = false) // this prevents the answer being stored from being empty, and occupying space in db.
 	protected String body;
 	
-	@ManyToOne
-	protected User student;
+	@ManyToOne(fetch = FetchType.LAZY) // this loads the answer object only and not the associated user student.
+	@JoinColumn(name="USER_ID",nullable=false)
+	protected User user;
 	
 	@OneToOne
+	@JoinColumn(name="HOMEWORK_ID",nullable=false)
 	protected Homework hw;
 	
 	protected Answer(){}
 	
 	public Answer(String body, User student,Homework hw){
 		this.body = body;
-		this.student = student;
+		this.user = student;
 		this.hw = hw;
 	}
 
@@ -48,11 +54,11 @@ public class Answer {
 	}
 
 	public User getStudent() {
-		return student;
+		return user;
 	}
 
-	public void setUser(User student) {
-		this.student = student;
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 	public Homework getHw() {

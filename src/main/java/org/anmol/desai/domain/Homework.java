@@ -1,5 +1,6 @@
 package org.anmol.desai.domain;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -11,11 +12,13 @@ import javax.persistence.TemporalType;
 public class Homework {
 	
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@GeneratedValue(generator=DatabaseConstants.ID_GENERATOR)
 	private Long _id;
 	
+	@Column(nullable = false)
 	private String title;
 	
+	@Column(nullable = false)
 	private String question;
 	
 	@Temporal(TemporalType.DATE)
