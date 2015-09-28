@@ -36,8 +36,7 @@ public class HomeworkSubmissionResource {
 	@POST
 	@Path("/User")
 	@Consumes("application/xml")
-	@Produces("application/xml")
-	public org.anmol.desai.dto.User createUser(org.anmol.desai.dto.User dtoUser){
+	public Response createUser(org.anmol.desai.dto.User dtoUser){
 
 		EntityManager em = FactoryAndDbInitialisation.getInstance().getFactory().createEntityManager();
 		em.getTransaction().begin();
@@ -61,9 +60,9 @@ public class HomeworkSubmissionResource {
 		
 		_logger.info("Persisted User: " + dtoUser);
 
-		return UserMapper.toDto(user);
+		//return UserMapper.toDto(user);
 
-		//return Response.created(URI.create("/Users/" + user.get_id())).build();
+		return Response.created(URI.create("/Users/" + user.get_id())).build();
 
 
 	}

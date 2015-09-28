@@ -89,19 +89,21 @@ public class HomeworkSubmissionTest  {
 		// first add a student and then a teacher.
 		org.anmol.desai.dto.User student = new org.anmol.desai.dto.User(firstName, lastName, type);
 
-		org.anmol.desai.dto.User response = _client
+		Response response = _client
 				.target(WEB_SERVICE_URI +"/User").request()
-				.post(Entity.xml(student),org.anmol.desai.dto.User.class);
+				.post(Entity.xml(student));
 
 
-		//if (response.getStatus() != 201) {
-		//	fail("Failed to create new Student");
-		//}
+		if (response.getStatus() != 201) {
+			fail("Failed to create new Student");
+		}
+		
+		String location = response.getLocation().toString();
+		response.close();
+		//id = response.get_id_UserDto();
 
-		id = response.get_id_UserDto();
-
-		_logger.info("id of newly created user is " + response.get_id_UserDto());
-		_logger.info("name of newly created user is " + response.getFirstNameUserDto() + " " + response.getLastNameUserDto());
+		_logger.info("location " + location);
+		//_logger.info("name of newly created user is " + response.getFirstNameUserDto() + " " + response.getLastNameUserDto());
 
 		//_logger.info("Location is " + response.getLocation());
 

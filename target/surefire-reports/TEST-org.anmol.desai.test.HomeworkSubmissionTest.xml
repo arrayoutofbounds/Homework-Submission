@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite failures="0" time="0.477" errors="0" skipped="0" tests="2" name="org.anmol.desai.test.HomeworkSubmissionTest">
+<testsuite failures="0" time="0.465" errors="0" skipped="0" tests="2" name="org.anmol.desai.test.HomeworkSubmissionTest">
   <properties>
     <property name="jboss.i18n.generate-proxies" value="true"/>
     <property name="java.runtime.name" value="OpenJDK Runtime Environment"/>
@@ -26,7 +26,7 @@
 "/>
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
     <property name="os.name" value="Linux"/>
-    <property name="classworlds.conf" value="/home/anmol/Desktop/sem2_2015/325/325_projects/.metadata/.plugins/org.eclipse.m2e.launching/launches/m2conf4983276761155031127.tmp"/>
+    <property name="classworlds.conf" value="/home/anmol/Desktop/sem2_2015/325/325_projects/.metadata/.plugins/org.eclipse.m2e.launching/launches/m2conf3697015210161032248.tmp"/>
     <property name="sun.jnu.encoding" value="UTF-8"/>
     <property name="java.library.path" value="/usr/java/packages/lib/amd64:/usr/lib/x86_64-linux-gnu/jni:/lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu:/usr/lib/jni:/lib:/usr/lib"/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
@@ -61,6 +61,6 @@
     <property name="sun.desktop" value="gnome"/>
     <property name="sun.cpu.isalist" value=""/>
   </properties>
-  <testcase time="0.441" classname="org.anmol.desai.test.HomeworkSubmissionTest" name="queryAnswer"/>
-  <testcase time="0.036" classname="org.anmol.desai.test.HomeworkSubmissionTest" name="addUser"/>
+  <testcase time="0.432" classname="org.anmol.desai.test.HomeworkSubmissionTest" name="queryAnswer"/>
+  <testcase time="0.033" classname="org.anmol.desai.test.HomeworkSubmissionTest" name="addUser"/>
 </testsuite>
