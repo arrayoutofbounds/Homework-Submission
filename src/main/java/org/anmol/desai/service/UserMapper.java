@@ -1,4 +1,4 @@
-package org.anmol.desai.services;
+package org.anmol.desai.service;
 
 import java.util.List;
 
@@ -41,12 +41,11 @@ public class UserMapper {
 		}
 		
 		// get the latest answer. that is at the end of th answers list assuming it is "added".
-		List<org.anmol.desai.domain.Answer> l =  user.getAnswersUser();
+		//List<org.anmol.desai.domain.Answer> l =  user.getAnswersUser();
 		
 		//there is a infinite loop here.
-		System.out.println(l.size() +"");
+		//System.out.println(l.size() +"");
 		
-		org.anmol.desai.domain.Answer latestAnswer = l.get(l.size()-1);
 		
 		
 		org.anmol.desai.dto.User dtoUser = 

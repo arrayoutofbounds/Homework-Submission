@@ -1,4 +1,4 @@
-package org.anmol.desai.services;
+package org.anmol.desai.service;
 
 import javax.ws.rs.ext.ContextResolver;
 import javax.xml.bind.JAXBContext;

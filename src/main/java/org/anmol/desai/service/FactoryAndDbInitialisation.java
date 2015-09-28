@@ -1,6 +1,7 @@
-package org.anmol.desai.services;
+package org.anmol.desai.service;
 
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -69,7 +70,9 @@ public class FactoryAndDbInitialisation {
 		_entityManager.getTransaction().commit();
 
 		_entityManager.close();
-
+		
+	
+		
 
 	}
 

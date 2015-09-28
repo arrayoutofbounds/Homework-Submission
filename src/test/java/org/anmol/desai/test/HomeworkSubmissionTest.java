@@ -1,6 +1,12 @@
 package org.anmol.desai.test;
 
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
+
+import java.util.List;
+import java.util.Set;
+
+import javax.ws.rs.core.GenericEntity;
+import javax.ws.rs.core.GenericType;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -24,10 +30,12 @@ import org.slf4j.LoggerFactory;
 public class HomeworkSubmissionTest  {
 
 	private Logger _logger = LoggerFactory.getLogger(HomeworkSubmissionTest.class);
-	
-	private static final String WEB_SERVICE_URI = "http://localhost:8080/services/hwsubmission";
-	
+
+	private static final String WEB_SERVICE_URI = "http://localhost:10000/services/hwsubmission";
+
 	private static Client _client;
+
+	private Long id;
 
 	/**
 	 * One-time setup method that creates a Web service client.
@@ -36,12 +44,14 @@ public class HomeworkSubmissionTest  {
 	public static void setUpClient() {
 		_client = ClientBuilder.newClient();
 	}
-	
+
+
+	// apprentely this code below causes an exception...for SOME GODDAMN REASON
 	/**
 	 * Runs before each unit test restore Web service database. This ensures
 	 * that each test is independent; each test runs on a Web service that has
 	 * been initialised with a common set of Parolees.
-	 */
+
 	@Before
 	public void reloadServerData() {
 		Response response = _client
@@ -54,37 +64,68 @@ public class HomeworkSubmissionTest  {
 		} catch (InterruptedException e) {
 		}
 	}
-	
+
+	 **/
+
 	/**
 	 * One-time finalisation method that destroys the Web service client.
 	 */
+
 	@AfterClass
 	public static void destroyClient() {
 		_client.close();
 	}
-	
+
+	/**
+	 * This test is most basic. It is adding users to the database.
+	 */
 	@Test
-	public void addAnswer(){
-		
+	public void addUser(){
+
+		String firstName = "Darth";
+		String lastName = "Vader";
+		String type = "Student";
+
+		// first add a student and then a teacher.
+		org.anmol.desai.dto.User student = new org.anmol.desai.dto.User(firstName, lastName, type);
+
+		org.anmol.desai.dto.User response = _client
+				.target(WEB_SERVICE_URI +"/User").request()
+				.post(Entity.xml(student),org.anmol.desai.dto.User.class);
+
+
+		//if (response.getStatus() != 201) {
+		//	fail("Failed to create new Student");
+		//}
+
+		id = response.get_id_UserDto();
+
+		_logger.info("id of newly created user is " + response.get_id_UserDto());
+		_logger.info("name of newly created user is " + response.getFirstNameUserDto() + " " + response.getLastNameUserDto());
+
+		//_logger.info("Location is " + response.getLocation());
+
+
 	}
-	
-	
+
+
+
+
 	/**
 	 * This tests sends an dto of Answer to the server and receives a dto. Then the content of the answer is printed out.
 	 */
 	@Test
 	public void queryAnswer(){
-		
-		
+
 		org.anmol.desai.dto.Answer answer = _client.target(WEB_SERVICE_URI + "/Answer/1").request().accept("application/xml").get(org.anmol.desai.dto.Answer.class);
-		
-		
+
 		_logger.info("Answer is " + answer.getBody());
-		
+
 	}
-	
-	
-	
+
+
+
+
 
 }
 
@@ -95,38 +136,38 @@ public void persistEntitiesToDb() {
 	_entityManager.getTransaction().begin();
 
 	User student = new Student("Anmol","Desai");
-	
+
 
 	_logger.info("The student is persisted ");
 
 	User teacher = new Teacher("Bapa","Bapa");
-	
+
 	_logger.info("The teacher is persisted ");
-	
+
 	java.util.Date d = new java.util.Date();
 	Homework hw = new Homework("title","year",d);
-	
+
 	// each student should be assigned a hw
 	student.addHomework(hw);
-	
+
 	// each homework has a list of assigned students
 	hw.addUser(student);
-	
+
 	Answer a = new Answer("content",student,hw);
 	student.addAnswer(a);
-	
+
 	_entityManager.persist(student);
 	_entityManager.persist(teacher);
 	_entityManager.persist(hw);
-	
+
 
 
 
 	_entityManager.getTransaction().commit();
-	
-	
+
+
 }
-*/
+ */
 
 /*
  * This is a test that gets the collection from the user and then returns the answer body.
@@ -139,7 +180,7 @@ for(Answer a2: student.getAnswers() ){
 	_logger.info("answer is " + a2.getBody());
 }
 
-*/
+ */
 
 /*
 int size = hw.getUsersAssigned().size();
@@ -150,5 +191,5 @@ for(User u: hw.getUsersAssigned() ){
 	_logger.info("answer is " + u.getFirstName());
 }
 
-*/
+ */
 //_entityManager.persist(a);

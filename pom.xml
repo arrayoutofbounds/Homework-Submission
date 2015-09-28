@@ -10,6 +10,10 @@
 	<name>Homework</name>
 	<description>A homwork submission RESTful Web service.</description>
 
+	<properties>
+		<servlet.container.port>10000</servlet.container.port>
+	</properties>
+
 	<dependencies>
 		<!-- JAX-RS DEPENDENCIES -->
 		<!-- RESTEasy implementation -->
@@ -162,6 +166,9 @@
 				<artifactId>jetty-maven-plugin</artifactId>
 				<version>9.0.6.v20130930</version>
 				<configuration>
+					<httpConnector>
+						<port>${servlet.container.port}</port>
+					</httpConnector>
 					<webApp>
 						<contextPath>/</contextPath>
 					</webApp>

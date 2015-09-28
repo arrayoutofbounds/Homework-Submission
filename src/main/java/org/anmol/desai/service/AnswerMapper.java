@@ -1,4 +1,4 @@
-package org.anmol.desai.services;
+package org.anmol.desai.service;
 
 import org.anmol.desai.dto.Answer;
 import org.anmol.desai.dto.Homework;
