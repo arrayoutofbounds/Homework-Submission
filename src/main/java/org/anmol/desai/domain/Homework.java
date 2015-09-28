@@ -5,12 +5,16 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.xml.bind.Unmarshaller;
+import javax.xml.bind.annotation.XmlTransient;
+
+import org.eclipse.persistence.oxm.annotations.XmlInverseReference;
 
 @Entity
 public class Homework {
@@ -29,7 +33,8 @@ public class Homework {
 	private java.util.Date duedate;
 	
 	 // each homework has a list of users it is assigned to 
-	@ManyToMany(mappedBy = "homeworkAssigned")
+	@ManyToMany(mappedBy = "homeworkAssigned",fetch = FetchType.EAGER)
+	@XmlTransient
 	private List<User> usersAssigned = new ArrayList<User>();
 	
 
@@ -42,14 +47,18 @@ public class Homework {
 		this.duedate = duedate;
 	}
 	
+
+
 	public void addUser(User user){
 		usersAssigned.add(user); 
 	}
 	
+	//@XmlTransient
 	public List<User> getUsersAssigned() {
 		return usersAssigned;
 	}
-
+	
+	
 
 	public void setUsersAssigned(List<User> usersAssigned) {
 		this.usersAssigned = usersAssigned;

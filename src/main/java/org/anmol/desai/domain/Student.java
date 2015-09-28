@@ -6,7 +6,7 @@ import javax.persistence.Entity;
 @Entity
 public class Student extends User {
 	
-	@Column(name="Type")
+	//@Column(name="Type")
 	private String type = "Student";
 	
 	protected Student(){}

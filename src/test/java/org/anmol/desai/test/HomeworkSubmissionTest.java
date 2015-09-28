@@ -76,7 +76,10 @@ public class HomeworkSubmissionTest  {
 	
 	@Test
 	public void queryAnswer(){
-		Answer answer = _client.target(WEB_SERVICE_URI + "/1").request().accept("application/xml").get(Answer.class);
+		
+		
+		org.anmol.desai.dto.Answer answer = _client.target(WEB_SERVICE_URI + "/1").request().accept("application/xml").get(org.anmol.desai.dto.Answer.class);
+		
 		
 		_logger.info("Answer is " + answer.getBody());
 		

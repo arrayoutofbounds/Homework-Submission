@@ -9,6 +9,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 
 import org.anmol.desai.domain.Answer;
@@ -27,6 +28,7 @@ public class HomeworkSubmissionResource {
 	
 	@GET
 	@Path("/{id}")
+	@Produces("application/xml")
 	public org.anmol.desai.dto.Answer getAnswer(
 			@PathParam("id") long id) {
 		// Get the full Parolee object from the database.
@@ -43,6 +45,7 @@ public class HomeworkSubmissionResource {
 		
 		// convert domain found to dto and return it
 		org.anmol.desai.dto.Answer dtoAnswer = AnswerMapper.toDto(answer);
+
 		
 		_logger.info("id is " + dtoAnswer.get_id());
 

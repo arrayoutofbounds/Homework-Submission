@@ -5,6 +5,8 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 
 import org.anmol.desai.domain.Answer;
+import org.anmol.desai.domain.Homework;
+import org.anmol.desai.domain.User;
 
 /**
  * 
@@ -20,7 +22,7 @@ public class HomeworkSubmissionResolver implements ContextResolver<JAXBContext> 
 	public HomeworkSubmissionResolver() {
 		try{
 			// list all the classes to be done marshalling and unmarshalling in a comma seperated way in _context after Answer.class
-			_context = JAXBContext.newInstance(Answer.class);
+			_context = JAXBContext.newInstance(Answer.class,Homework.class,User.class);
 		}catch(JAXBException e){
 			e.printStackTrace();
 		}
@@ -31,7 +33,7 @@ public class HomeworkSubmissionResolver implements ContextResolver<JAXBContext> 
 	 */
 	@Override
 	public JAXBContext getContext(Class<?> type) {
-		if(type.equals(Answer.class)){
+		if(type.equals(Answer.class) || type.equals(Homework.class)){
 			return _context;
 		}else{
 			return null;

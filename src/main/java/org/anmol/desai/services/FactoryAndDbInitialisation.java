@@ -46,7 +46,7 @@ public class FactoryAndDbInitialisation {
 		_entityManager.getTransaction().begin();
 
 
-		User student = new Student("Anmol","Desai");
+		User student = new Student("Anmol","Desaiiiiiiiiii");
 
 		User teacher = new Teacher("Bapa","Bapa");
 

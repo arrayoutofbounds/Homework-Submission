@@ -16,6 +16,14 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.xml.bind.Unmarshaller;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlTransient;
+
+
+
+
+import org.eclipse.persistence.oxm.annotations.XmlInverseReference;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -37,7 +45,7 @@ public abstract class User {
 	
 	
 	// each user has a list of homeworks assigned to them
-	@ManyToMany(cascade = CascadeType.PERSIST)
+	@ManyToMany(cascade = CascadeType.PERSIST,fetch=FetchType.EAGER)
 	@JoinTable(
 			name="Homwork_Assigned", 
 			joinColumns = @JoinColumn(name = "USER_ID"),
@@ -52,8 +60,7 @@ public abstract class User {
 		this.lastName = lastName;
 	}
 	
-
-
+	@XmlTransient
 	public List<Homework> getHomeworkAssigned() {
 		return homeworkAssigned;
 	}
@@ -70,7 +77,7 @@ public abstract class User {
 		answers.add(a);
 	}
 
-	public List<Answer> getAnswers() {
+	public List<Answer> getAnswersUser() {
 		return answers;
 	}
 
