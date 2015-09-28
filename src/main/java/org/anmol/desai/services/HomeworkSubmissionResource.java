@@ -27,7 +27,7 @@ public class HomeworkSubmissionResource {
 	
 	
 	@GET
-	@Path("/{id}")
+	@Path("/Answer/{id}")
 	@Produces("application/xml")
 	public org.anmol.desai.dto.Answer getAnswer(
 			@PathParam("id") long id) {

@@ -13,6 +13,8 @@ import org.anmol.desai.domain.Homework;
 import org.anmol.desai.domain.Student;
 import org.anmol.desai.domain.Teacher;
 import org.anmol.desai.domain.User;
+import org.junit.AfterClass;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -35,50 +37,46 @@ public class HomeworkSubmissionTest  {
 		_client = ClientBuilder.newClient();
 	}
 	
-	/*
+	/**
+	 * Runs before each unit test restore Web service database. This ensures
+	 * that each test is independent; each test runs on a Web service that has
+	 * been initialised with a common set of Parolees.
+	 */
+	@Before
+	public void reloadServerData() {
+		Response response = _client
+				.target(WEB_SERVICE_URI).request()
+				.put(null);
+		response.close();
+
+		try {
+			Thread.sleep(10);
+		} catch (InterruptedException e) {
+		}
+	}
+	
+	/**
+	 * One-time finalisation method that destroys the Web service client.
+	 */
+	@AfterClass
+	public static void destroyClient() {
+		_client.close();
+	}
+	
 	@Test
-	public void persistEntitiesToDb() {
-		_entityManager.getTransaction().begin();
-
-		User student = new Student("Anmol","Desai");
-		
-
-		_logger.info("The student is persisted ");
-
-		User teacher = new Teacher("Bapa","Bapa");
-		
-		_logger.info("The teacher is persisted ");
-		
-		java.util.Date d = new java.util.Date();
-		Homework hw = new Homework("title","year",d);
-		
-		// each student should be assigned a hw
-		student.addHomework(hw);
-		
-		// each homework has a list of assigned students
-		hw.addUser(student);
-		
-		Answer a = new Answer("content",student,hw);
-		student.addAnswer(a);
-		
-		_entityManager.persist(student);
-		_entityManager.persist(teacher);
-		_entityManager.persist(hw);
-		
-
-
-
-		_entityManager.getTransaction().commit();
-		
+	public void addAnswer(){
 		
 	}
-	*/
 	
+	
+	/**
+	 * This tests sends an dto of Answer to the server and receives a dto. Then the content of the answer is printed out.
+	 */
 	@Test
 	public void queryAnswer(){
 		
 		
-		org.anmol.desai.dto.Answer answer = _client.target(WEB_SERVICE_URI + "/1").request().accept("application/xml").get(org.anmol.desai.dto.Answer.class);
+		org.anmol.desai.dto.Answer answer = _client.target(WEB_SERVICE_URI + "/Answer/1").request().accept("application/xml").get(org.anmol.desai.dto.Answer.class);
 		
 		
 		_logger.info("Answer is " + answer.getBody());
@@ -90,6 +88,45 @@ public class HomeworkSubmissionTest  {
 
 }
 
+
+/*
+@Test
+public void persistEntitiesToDb() {
+	_entityManager.getTransaction().begin();
+
+	User student = new Student("Anmol","Desai");
+	
+
+	_logger.info("The student is persisted ");
+
+	User teacher = new Teacher("Bapa","Bapa");
+	
+	_logger.info("The teacher is persisted ");
+	
+	java.util.Date d = new java.util.Date();
+	Homework hw = new Homework("title","year",d);
+	
+	// each student should be assigned a hw
+	student.addHomework(hw);
+	
+	// each homework has a list of assigned students
+	hw.addUser(student);
+	
+	Answer a = new Answer("content",student,hw);
+	student.addAnswer(a);
+	
+	_entityManager.persist(student);
+	_entityManager.persist(teacher);
+	_entityManager.persist(hw);
+	
+
+
+
+	_entityManager.getTransaction().commit();
+	
+	
+}
+*/
 
 /*
  * This is a test that gets the collection from the user and then returns the answer body.
