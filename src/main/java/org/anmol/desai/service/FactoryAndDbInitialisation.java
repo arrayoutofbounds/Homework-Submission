@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashSet;
@@ -18,8 +19,13 @@ import org.anmol.desai.domain.Homework;
 import org.anmol.desai.domain.Student;
 import org.anmol.desai.domain.Teacher;
 import org.anmol.desai.domain.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class FactoryAndDbInitialisation {
+	
+	private static Logger _logger = null;
+
 
 	private static FactoryAndDbInitialisation singleton = null;
 
@@ -32,6 +38,8 @@ public class FactoryAndDbInitialisation {
 	 * class from instantiating.
 	 */
 	private FactoryAndDbInitialisation(){
+		
+		_logger = LoggerFactory.getLogger(FactoryAndDbInitialisation.class);
 
 		try {
 			initialiseDatabase();
@@ -50,6 +58,8 @@ public class FactoryAndDbInitialisation {
 		User student = new Student("Anmol","Desaiiiiiiiiii");
 
 		User teacher = new Teacher("Bapa","Bapa");
+		
+		User teacher2 = new Teacher("a","a");
 
 		java.util.Date d = new java.util.Date();
 		Homework hw = new Homework("title","year",d);
@@ -65,6 +75,7 @@ public class FactoryAndDbInitialisation {
 
 		_entityManager.persist(student);
 		_entityManager.persist(teacher);
+		_entityManager.persist(teacher2);
 		_entityManager.persist(hw);
 
 		_entityManager.getTransaction().commit();
@@ -72,7 +83,6 @@ public class FactoryAndDbInitialisation {
 		_entityManager.close();
 		
 	
-		
 
 	}
 
@@ -85,7 +95,8 @@ public class FactoryAndDbInitialisation {
 		// Open a connection to the database. This is used solely to delete rows
 		// from any database tables and to drop the tables.
 		_jdbcConnection = DriverManager.getConnection(
-				"jdbc:h2:~/test;mv_store=false", "sa", "sa");
+				"jdbc:h2:~/test;mv_store=false;MVCC=TRUE", "sa", "sa");
+
 
 		// Drop any existing tables.
 		clearDatabase(true);
@@ -132,6 +143,7 @@ public class FactoryAndDbInitialisation {
 
 		return singleton;
 	}
+	
 
 
 }

@@ -2,6 +2,7 @@ package org.anmol.desai.service;
 
 import java.io.InputStream;
 import java.net.URI;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -50,23 +51,54 @@ public class HomeworkSubmissionResource {
 		em.persist(user);
 
 		em.flush();
-		
+
 		if(em.contains(user)){
 			_logger.info("IT IS IN DB");
 		}
 
 		org.anmol.desai.domain.User st = em.find(org.anmol.desai.domain.User.class, user.get_id());    
 
-		
+
 		_logger.info("Persisted User: " + dtoUser);
 
 		//return UserMapper.toDto(user);
+		
+		em.getTransaction().commit();
 
-		return Response.created(URI.create("/Users/" + user.get_id())).build();
+		em.close();
+
+		return Response.created(URI.create("/User/" + user.get_id())).build();
 
 
 	}
-	
+
+
+	@GET
+	@Path("/User/{id}")
+	@Produces("application/xml")
+	public org.anmol.desai.dto.User getUser(@PathParam("id") long id){
+		EntityManager em = FactoryAndDbInitialisation.getInstance().getFactory().createEntityManager();
+
+		em.getTransaction().begin();
+		// get the answer from the database
+		org.anmol.desai.domain.User user = em.find(org.anmol.desai.domain.User.class,id);
+
+		if(user == null){
+			_logger.info("user is not in db" + " " + id);
+		}
+
+		// convert domain found to dto and return it
+		org.anmol.desai.dto.User dtoUser = UserMapper.toDto(user);
+
+
+		_logger.info("id is " + dtoUser.get_id_UserDto());
+
+		em.getTransaction().commit();
+
+		em.close();
+
+		return dtoUser;
+	}
 
 
 	@GET
@@ -79,6 +111,8 @@ public class HomeworkSubmissionResource {
 
 		em.getTransaction().begin();
 
+
+		
 		// get the answer from the database
 		Answer answer = em.find(Answer.class,id);
 

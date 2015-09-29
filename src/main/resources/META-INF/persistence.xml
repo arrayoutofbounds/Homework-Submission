@@ -17,7 +17,7 @@
   <properties>
    <!-- Database connection properties. -->
    <property name="hibernate.connection.driver_class" value="org.h2.Driver" />
-   <property name="hibernate.connection.url" value="jdbc:h2:~/test;mv_store=false" />
+   <property name="hibernate.connection.url" value="jdbc:h2:~/test;mv_store=false;MVCC=TRUE" />
    <property name="hibernate.connection.username" value ="sa" />
    <property name="hibernate.connection.password" value = "sa" />
    

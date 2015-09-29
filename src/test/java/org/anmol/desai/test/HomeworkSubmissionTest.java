@@ -2,6 +2,7 @@ package org.anmol.desai.test;
 
 import static org.junit.Assert.*;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Set;
 
@@ -19,6 +20,7 @@ import org.anmol.desai.domain.Homework;
 import org.anmol.desai.domain.Student;
 import org.anmol.desai.domain.Teacher;
 import org.anmol.desai.domain.User;
+import org.anmol.desai.service.FactoryAndDbInitialisation;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -99,14 +101,36 @@ public class HomeworkSubmissionTest  {
 		}
 		
 		String location = response.getLocation().toString();
+		
 		response.close();
+		
+		
+		_logger.info(location);
+		location = WEB_SERVICE_URI + "" +  location.substring(31);
+		_logger.info(location);
+		
+		org.anmol.desai.dto.User receivedUser = null;
+		
+		receivedUser = _client.target(location).request().get(org.anmol.desai.dto.User.class);
+		
+		
 		//id = response.get_id_UserDto();
 
-		_logger.info("location " + location);
-		//_logger.info("name of newly created user is " + response.getFirstNameUserDto() + " " + response.getLastNameUserDto());
+		
+		//_logger.info("location " + location);
+		//location = WEB_SERVICE_URI + "" +  location.substring(31);
+		//logger.info(location);
+		_logger.info("name of newly created user is " + receivedUser.getFirstNameUserDto() + " " + receivedUser.getLastNameUserDto());
 
 		//_logger.info("Location is " + response.getLocation());
-
+		
+		
+		//org.anmol.desai.dto.User receivedUser = null;
+		
+		//receivedUser = _client.target(location).request().get(org.anmol.desai.dto.User.class);
+		//assertEquals(student, receivedUser);
+		
+		//
 
 	}
 
@@ -115,9 +139,11 @@ public class HomeworkSubmissionTest  {
 
 	/**
 	 * This tests sends an dto of Answer to the server and receives a dto. Then the content of the answer is printed out.
+	 * @throws SQLException 
 	 */
 	@Test
 	public void queryAnswer(){
+
 
 		org.anmol.desai.dto.Answer answer = _client.target(WEB_SERVICE_URI + "/Answer/1").request().accept("application/xml").get(org.anmol.desai.dto.Answer.class);
 
