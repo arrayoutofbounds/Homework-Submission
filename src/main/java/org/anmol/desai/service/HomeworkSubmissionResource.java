@@ -35,7 +35,7 @@ public class HomeworkSubmissionResource {
 
 
 	@POST
-	@Path("/User")
+	@Path("/Users")
 	@Consumes("application/xml")
 	public Response createUser(org.anmol.desai.dto.User dtoUser){
 
@@ -67,14 +67,14 @@ public class HomeworkSubmissionResource {
 
 		em.close();
 
-		return Response.created(URI.create("/User/" + user.get_id())).build();
+		return Response.created(URI.create("/Users/" + user.get_id())).build();
 
 
 	}
 
 
 	@GET
-	@Path("/User/{id}")
+	@Path("/Users/{id}")
 	@Produces("application/xml")
 	public org.anmol.desai.dto.User getUser(@PathParam("id") long id){
 		EntityManager em = FactoryAndDbInitialisation.getInstance().getFactory().createEntityManager();
@@ -102,7 +102,7 @@ public class HomeworkSubmissionResource {
 	
 	
 	@POST
-	@Path("/Answer")
+	@Path("/Answers")
 	@Consumes("application/xml")
 	public Response createAnswer(org.anmol.desai.dto.Answer dtoAnswer){
 
@@ -134,7 +134,7 @@ public class HomeworkSubmissionResource {
 
 		em.close();
 
-		return Response.created(URI.create("/Answer/" + answer.get_id())).build();
+		return Response.created(URI.create("/Answers/" + answer.get_id())).build();
 
 
 	}
@@ -142,7 +142,7 @@ public class HomeworkSubmissionResource {
 
 
 	@GET
-	@Path("/Answer/{id}")
+	@Path("/Answers/{id}")
 	@Produces("application/xml")
 	public org.anmol.desai.dto.Answer getAnswer(
 			@PathParam("id") long id) {

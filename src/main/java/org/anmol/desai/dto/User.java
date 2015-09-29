@@ -96,9 +96,11 @@ public class User {
 		}
 		if(lastName != null) {
 			buffer.append(lastName);
-			//buffer.append(", ");
+			buffer.append(", ");
 		}
-		
+		if(type != null){
+			buffer.append(type);
+		}
 		
 		buffer.append(" }");
 		

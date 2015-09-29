@@ -95,7 +95,7 @@ public class HomeworkSubmissionTest  {
 
 		// get a response object that has the result of doing a "POST" method.
 		Response response = _client
-				.target(WEB_SERVICE_URI +"/User").request()
+				.target(WEB_SERVICE_URI +"/Users").request()
 				.post(Entity.xml(student));
 
 		// if response is successful in posting then a 201 is sent back, else there is an error.
@@ -159,7 +159,7 @@ public class HomeworkSubmissionTest  {
 
 		// get a response object that has the result of doing a "POST" method.
 		Response response = _client
-				.target(WEB_SERVICE_URI +"/Answer").request()
+				.target(WEB_SERVICE_URI +"/Answers").request()
 				.post(Entity.xml(answer));
 
 		// if response is successful in posting then a 201 is sent back, else there is an error.
