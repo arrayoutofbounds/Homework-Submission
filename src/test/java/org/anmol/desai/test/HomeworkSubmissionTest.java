@@ -77,6 +77,21 @@ public class HomeworkSubmissionTest  {
 	public static void destroyClient() {
 		_client.close();
 	}
+	
+	
+	@Test
+	public void queryAllUsers(){
+		List<org.anmol.desai.dto.User> users = _client
+				.target(WEB_SERVICE_URI +"/Users").request()
+				.accept("application/xml")
+				.get(new GenericType<List<org.anmol.desai.dto.User>>() {
+				});
+		
+		
+		for(org.anmol.desai.dto.User u : users){
+			_logger.info(u +"");
+		}
+	}
 
 	/**
 	 * This test is most basic. It is adding users to the database. It ALSO tests GET request of a USER.

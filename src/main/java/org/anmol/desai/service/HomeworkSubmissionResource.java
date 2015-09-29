@@ -32,7 +32,70 @@ public class HomeworkSubmissionResource {
 
 	//static EntityManagerFactory emf = Persistence.createEntityManagerFactory("homeworkPU");
 	//static EntityManager em = emf.createEntityManager();
+	
+	/**
+	 * GET user. This method gets the user from the specified ID in the uri.
+	 * @param id
+	 * @return
+	 */
+	@GET
+	@Path("/Users/{id}")
+	@Produces("application/xml")
+	public org.anmol.desai.dto.User getUser(@PathParam("id") long id){
+		EntityManager em = FactoryAndDbInitialisation.getInstance().getFactory().createEntityManager();
 
+		em.getTransaction().begin();
+		// get the answer from the database
+		org.anmol.desai.domain.User user = em.find(org.anmol.desai.domain.User.class,id);
+
+		if(user == null){
+			_logger.info("user is not in db" + " " + id);
+		}
+
+		// convert domain found to dto and return it
+		org.anmol.desai.dto.User dtoUser = UserMapper.toDto(user);
+
+
+		_logger.info("id is " + dtoUser.get_id_UserDto());
+
+		em.getTransaction().commit();
+
+		em.close();
+
+		return dtoUser;
+	}
+	
+	
+	@GET
+	@Path("/Users")
+	@Produces("application/xml")
+	public List<org.anmol.desai.dto.User> getUsers(){
+		
+		EntityManager em = FactoryAndDbInitialisation.getInstance().getFactory().createEntityManager();
+
+		em.getTransaction().begin();
+		
+		// create list
+		List<org.anmol.desai.domain.User> allUsers = new ArrayList<org.anmol.desai.domain.User>();
+		
+		List<org.anmol.desai.dto.User> usersReturned = new ArrayList<org.anmol.desai.dto.User>();
+		
+		allUsers = em.createQuery("select u FROM User u").getResultList();
+		
+		em.getTransaction().commit();
+
+		em.close();
+		
+		if(allUsers == null){
+			_logger.info("No users are in the database");
+		}else{
+			for(org.anmol.desai.domain.User user : allUsers){
+				usersReturned.add(UserMapper.toDto(user));
+			}
+		}
+		
+		return usersReturned;	
+	}
 
 	@POST
 	@Path("/Users")
@@ -73,32 +136,6 @@ public class HomeworkSubmissionResource {
 	}
 
 
-	@GET
-	@Path("/Users/{id}")
-	@Produces("application/xml")
-	public org.anmol.desai.dto.User getUser(@PathParam("id") long id){
-		EntityManager em = FactoryAndDbInitialisation.getInstance().getFactory().createEntityManager();
-
-		em.getTransaction().begin();
-		// get the answer from the database
-		org.anmol.desai.domain.User user = em.find(org.anmol.desai.domain.User.class,id);
-
-		if(user == null){
-			_logger.info("user is not in db" + " " + id);
-		}
-
-		// convert domain found to dto and return it
-		org.anmol.desai.dto.User dtoUser = UserMapper.toDto(user);
-
-
-		_logger.info("id is " + dtoUser.get_id_UserDto());
-
-		em.getTransaction().commit();
-
-		em.close();
-
-		return dtoUser;
-	}
 	
 	
 	@POST
