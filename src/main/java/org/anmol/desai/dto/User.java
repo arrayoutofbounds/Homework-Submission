@@ -39,7 +39,7 @@ public class User {
 	}
 	
 	// this is the constructor used by the server to convert from domain to dto
-	public User(Long id,String firstName, String lastName,String type){// org.anmol.desai.domain.Answer latestAnswer){
+	public User(Long id,String firstName, String lastName,String type){        // org.anmol.desai.domain.Answer latestAnswer){
 		this._id = id;
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -96,7 +96,7 @@ public class User {
 		}
 		if(lastName != null) {
 			buffer.append(lastName);
-			buffer.append(", ");
+			//buffer.append(", ");
 		}
 		
 		

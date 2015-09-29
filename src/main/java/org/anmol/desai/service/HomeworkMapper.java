@@ -4,9 +4,11 @@ import org.anmol.desai.domain.Homework;
 
 public class HomeworkMapper {
 	
+	// domain hw takes in (string, string, date)
+	
 	// dto has a pointless value inserted into its id because the database creates the id due to the generator.
-		static Homework toDomainModel(org.anmol.desai.dto.Homework dtoHomework) {
-			Homework fullHomework = new Homework(
+		static org.anmol.desai.domain.Homework toDomainModel(org.anmol.desai.dto.Homework dtoHomework) {
+			org.anmol.desai.domain.Homework fullHomework = new Homework(
 					dtoHomework.getTitle(),
 					dtoHomework.getQuestion(),
 					dtoHomework.getDuedate()

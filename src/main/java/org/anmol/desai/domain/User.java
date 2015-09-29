@@ -60,7 +60,6 @@ public abstract class User {
 		this.lastName = lastName;
 	}
 	
-	@XmlTransient
 	public List<Homework> getHomeworkAssigned() {
 		return homeworkAssigned;
 	}

@@ -29,12 +29,12 @@ public class Homework {
 	@Column(nullable = false)
 	private String question;
 	
-	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.TIMESTAMP)
 	private java.util.Date duedate;
 	
 	 // each homework has a list of users it is assigned to 
 	@ManyToMany(mappedBy = "homeworkAssigned",fetch = FetchType.EAGER)
-	@XmlTransient
+	//@XmlTransient
 	private List<User> usersAssigned = new ArrayList<User>();
 	
 

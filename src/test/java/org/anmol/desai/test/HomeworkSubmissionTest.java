@@ -79,10 +79,12 @@ public class HomeworkSubmissionTest  {
 	}
 
 	/**
-	 * This test is most basic. It is adding users to the database.
+	 * This test is most basic. It is adding users to the database. It ALSO tests GET request of a USER.
+	 * Because the generator changes the id every time, a post request has to be done, followed by the needed get request
+	 * to ensure that correct behaviour ensues when a get request is made.
 	 */
 	@Test
-	public void addUser(){
+	public void postAndQueryUser(){
 
 		String firstName = "Darth";
 		String lastName = "Vader";
@@ -91,47 +93,38 @@ public class HomeworkSubmissionTest  {
 		// first add a student and then a teacher.
 		org.anmol.desai.dto.User student = new org.anmol.desai.dto.User(firstName, lastName, type);
 
+		// get a response object that has the result of doing a "POST" method.
 		Response response = _client
 				.target(WEB_SERVICE_URI +"/User").request()
 				.post(Entity.xml(student));
 
-
+		// if response is successful in posting then a 201 is sent back, else there is an error.
 		if (response.getStatus() != 201) {
 			fail("Failed to create new Student");
 		}
-		
+
+		// get the location string from the response
 		String location = response.getLocation().toString();
-		
+
 		response.close();
-		
-		
-		_logger.info(location);
+
+
+		//_logger.info(location);
 		location = WEB_SERVICE_URI + "" +  location.substring(31);
-		_logger.info(location);
-		
+		_logger.info("The uri to send to check if user was created is " + location);
+
 		org.anmol.desai.dto.User receivedUser = null;
-		
+
 		receivedUser = _client.target(location).request().get(org.anmol.desai.dto.User.class);
-		
-		
-		//id = response.get_id_UserDto();
 
-		
-		//_logger.info("location " + location);
-		//location = WEB_SERVICE_URI + "" +  location.substring(31);
-		//logger.info(location);
-		_logger.info("name of newly created user is " + receivedUser.getFirstNameUserDto() + " " + receivedUser.getLastNameUserDto());
+		//_logger.info("name of newly created user is " + receivedUser.getFirstNameUserDto() + " " + receivedUser.getLastNameUserDto());
 
-		//_logger.info("Location is " + response.getLocation());
-		
-		
-		//org.anmol.desai.dto.User receivedUser = null;
-		
-		//receivedUser = _client.target(location).request().get(org.anmol.desai.dto.User.class);
-		//assertEquals(student, receivedUser);
-		
-		//
 
+		assertEquals(student.getFirstNameUserDto(), receivedUser.getFirstNameUserDto());
+		assertEquals(student.getLastNameUserDto(), receivedUser.getLastNameUserDto());
+		assertEquals(student.getTypeUserDto(), receivedUser.getTypeUserDto());
+
+		_logger.info("All tests passed. Name and type are the same as created");
 	}
 
 
@@ -142,13 +135,66 @@ public class HomeworkSubmissionTest  {
 	 * @throws SQLException 
 	 */
 	@Test
-	public void queryAnswer(){
+	public void postAndQueryAnswer(){
+
+		_logger.info("Make a answer and post it so it can be queried. Answer consists of string, user, homework");
+
+		String firstName = "Ian";
+		String lastName = "Warren";
+		String type = "Teacher";
+
+		// first add a student and then a teacher.
+		org.anmol.desai.dto.User teacher = new org.anmol.desai.dto.User(firstName, lastName, type);
+
+		String title = "Assignment 2";
+		String question = "What course is this?";
+		java.util.Date duedate = new java.util.Date();
+
+		// make a dto homework
+		org.anmol.desai.dto.Homework hw = new org.anmol.desai.dto.Homework( title,  question, duedate);
+
+		String body = "this is 325";
+
+		org.anmol.desai.dto.Answer answer = new org.anmol.desai.dto.Answer(body, teacher, hw);
+
+		// get a response object that has the result of doing a "POST" method.
+		Response response = _client
+				.target(WEB_SERVICE_URI +"/Answer").request()
+				.post(Entity.xml(answer));
+
+		// if response is successful in posting then a 201 is sent back, else there is an error.
+		if (response.getStatus() != 201) {
+			fail("Failed to create new Answer");
+		}
+
+		// get the location string from the response
+		String location = response.getLocation().toString();
+
+		response.close();
 
 
-		org.anmol.desai.dto.Answer answer = _client.target(WEB_SERVICE_URI + "/Answer/1").request().accept("application/xml").get(org.anmol.desai.dto.Answer.class);
+		//_logger.info(location);
+		location = WEB_SERVICE_URI + "" +  location.substring(31);
+		_logger.info("The uri to send to check if user was created is " + location);
 
-		_logger.info("Answer is " + answer.getBody());
 
+
+		org.anmol.desai.dto.Answer receivedAnswer = _client.target(location).request().accept("application/xml").get(org.anmol.desai.dto.Answer.class);
+		
+		_logger.info("before " + duedate);
+		_logger.info("after " + receivedAnswer.getHw().getDuedate());
+		
+		assertEquals(answer.getBody(),receivedAnswer.getBody());
+		
+		assertEquals(answer.getUser().getFirstNameUserDto(),receivedAnswer.getUser().getFirstNameUserDto());
+		assertEquals(answer.getUser().getLastNameUserDto(),receivedAnswer.getUser().getLastNameUserDto());
+		assertEquals(answer.getUser().getTypeUserDto(),receivedAnswer.getUser().getTypeUserDto());
+		
+		assertEquals(answer.getHw().getTitle(),receivedAnswer.getHw().getTitle());
+		assertEquals(answer.getHw().getQuestion(),receivedAnswer.getHw().getQuestion());
+		assertEquals(answer.getHw().getDuedate().getTime(),receivedAnswer.getHw().getDuedate().getTime());
+		
+		_logger.info("All tests passed. Body, User and Homework are the same");
 	}
 
 

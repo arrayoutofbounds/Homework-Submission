@@ -106,7 +106,7 @@ public class Answer {
 		}
 		
 		if(hw != null){
-			buffer.append(hw.getTitle() + " " + hw.getQuestion());
+			buffer.append(hw.getTitle() + "; " + hw.getQuestion());
 			
 		}
 		buffer.append(" }");

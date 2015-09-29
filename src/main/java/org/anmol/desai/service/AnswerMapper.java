@@ -7,11 +7,14 @@ import org.anmol.desai.dto.User;
 public class AnswerMapper {
 	
 	// dto has a pointless value inserted into its id because the database creates the id due to the generator.
-	static Answer toDomainModel(org.anmol.desai.dto.Answer dtoAnswer) {
-		Answer fullAnswer = new Answer(
+	
+	// domain answer takes in  (string, domain user, domain homework)
+	
+	static org.anmol.desai.domain.Answer toDomainModel(org.anmol.desai.dto.Answer dtoAnswer) {
+		org.anmol.desai.domain.Answer fullAnswer = new org.anmol.desai.domain.Answer(
 				dtoAnswer.getBody(),
-				dtoAnswer.getUser(),
-				dtoAnswer.getHw()
+				UserMapper.toDomainModel(dtoAnswer.getUser()),
+				HomeworkMapper.toDomainModel(dtoAnswer.getHw())
 				);
 		return fullAnswer;
 	}

@@ -43,23 +43,23 @@ public class HomeworkSubmissionResource {
 		em.getTransaction().begin();
 
 		// reading the user
-		_logger.debug("Read User: " + dtoUser);
+		_logger.info("Read User: " + dtoUser);
+		_logger.info("type of user to be created is " + dtoUser.getTypeUserDto());
 
 		org.anmol.desai.domain.User user = UserMapper.toDomainModel(dtoUser);
 
-
+		
 		em.persist(user);
-
-		em.flush();
+		//em.flush(); // flush it so next statement can be put in
 
 		if(em.contains(user)){
 			_logger.info("IT IS IN DB");
 		}
 
-		org.anmol.desai.domain.User st = em.find(org.anmol.desai.domain.User.class, user.get_id());    
+		//org.anmol.desai.domain.User st = em.find(org.anmol.desai.domain.User.class, user.get_id());    
 
 
-		_logger.info("Persisted User: " + dtoUser);
+		//_logger.info("Persisted User: " + dtoUser);
 
 		//return UserMapper.toDto(user);
 		
@@ -99,6 +99,46 @@ public class HomeworkSubmissionResource {
 
 		return dtoUser;
 	}
+	
+	
+	@POST
+	@Path("/Answer")
+	@Consumes("application/xml")
+	public Response createAnswer(org.anmol.desai.dto.Answer dtoAnswer){
+
+		EntityManager em = FactoryAndDbInitialisation.getInstance().getFactory().createEntityManager();
+		em.getTransaction().begin();
+
+		// reading the user
+		_logger.info("Read Answer: " + dtoAnswer);
+		
+		// make a domain model answer
+		org.anmol.desai.domain.Answer answer = AnswerMapper.toDomainModel(dtoAnswer);
+		
+		_logger.info("date is " + answer.getHw().getDuedate());
+
+		// persist in db
+		em.persist(answer.getUser());
+		em.persist(answer.getHw());
+		em.persist(answer);
+
+		if(em.contains(answer)){
+			_logger.info("IT IS IN DB");
+		}
+		
+		//org.anmol.desai.domain.Homework h = em.find(org.anmol.desai.domain.Homework.class, answer.getHw().get_id());
+		
+		//_logger.info("after persisted date is "  + h.getDuedate());
+
+		em.getTransaction().commit();
+
+		em.close();
+
+		return Response.created(URI.create("/Answer/" + answer.get_id())).build();
+
+
+	}
+	
 
 
 	@GET
@@ -125,6 +165,7 @@ public class HomeworkSubmissionResource {
 
 
 		_logger.info("id is " + dtoAnswer.get_id());
+		//_logger.info("hw duedate is " + dtoAnswer.getHw().getDuedate());
 
 		em.getTransaction().commit();
 
