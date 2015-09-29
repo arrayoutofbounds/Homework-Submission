@@ -92,6 +92,46 @@ public class HomeworkSubmissionTest  {
 			_logger.info(u +"");
 		}
 	}
+	
+	@Test
+	public void updateUser(){
+		
+		List<org.anmol.desai.dto.User> users = _client
+				.target(WEB_SERVICE_URI +"/Users").request()
+				.accept("application/xml")
+				.get(new GenericType<List<org.anmol.desai.dto.User>>() {
+				});
+		
+		org.anmol.desai.dto.User u = users.get(0);
+		
+		_logger.info("Before update: ");
+		_logger.info("First name is " + u.getFirstNameUserDto());
+		_logger.info("First name is " + u.getLastNameUserDto());
+		_logger.info("First name is " + u.getTypeUserDto());
+		
+		
+		u.setFirstName("im");
+		u.setLastName("awesome");
+		
+		Response response2 = _client.target(WEB_SERVICE_URI + "/Users/" + u.get_id_UserDto()).request().put(Entity.xml(u));
+		
+		if (response2.getStatus() != 200)
+			fail("Failed to update User");
+		
+		org.anmol.desai.dto.User returnedUser = response2.readEntity(org.anmol.desai.dto.User.class);
+		
+		response2.close();
+		
+		_logger.info("After update: ");
+		_logger.info("First name is " + returnedUser.getFirstNameUserDto());
+		_logger.info("First name is " + returnedUser.getLastNameUserDto());
+		_logger.info("First name is " + returnedUser.getTypeUserDto());
+		
+	
+		
+		
+		
+	}
 
 	/**
 	 * This test is most basic. It is adding users to the database. It ALSO tests GET request of a USER.

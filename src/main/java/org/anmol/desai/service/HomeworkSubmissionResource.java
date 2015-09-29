@@ -14,6 +14,7 @@ import javax.persistence.Persistence;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -80,7 +81,7 @@ public class HomeworkSubmissionResource {
 		
 		List<org.anmol.desai.dto.User> usersReturned = new ArrayList<org.anmol.desai.dto.User>();
 		
-		allUsers = em.createQuery("select u FROM User u").getResultList();
+		allUsers = em.createQuery("select u FROM User u").getResultList(); // for table name, user the name of the domain class.
 		
 		em.getTransaction().commit();
 
@@ -133,6 +134,36 @@ public class HomeworkSubmissionResource {
 		return Response.created(URI.create("/Users/" + user.get_id())).build();
 
 
+	}
+	
+	@PUT
+	@Path("/Users/{id}")
+	@Consumes("application/xml")
+	@Produces("application/xml")
+	public Response updateUser(org.anmol.desai.dto.User dtoUser){
+		
+		EntityManager em = FactoryAndDbInitialisation.getInstance().getFactory().createEntityManager();
+		em.getTransaction().begin();
+		
+		// pass in the table of the domain class you want to look in and the id .
+		// User is a super class table, so just look in there with the id of the dto
+		org.anmol.desai.domain.User userToUpdate = em.find(org.anmol.desai.domain.User.class, dtoUser.get_id_UserDto());
+		
+		if(userToUpdate == null){
+			_logger.info("user to update is null");
+		}
+		
+		userToUpdate.setFirstName(dtoUser.getFirstNameUserDto());
+		userToUpdate.setLastName(dtoUser.getLastNameUserDto());
+		
+		em.merge(userToUpdate);
+	
+		em.getTransaction().commit();
+
+		em.close();
+		
+		return Response.ok(UserMapper.toDto(userToUpdate)).build();
+		
 	}
 
 
@@ -191,7 +222,7 @@ public class HomeworkSubmissionResource {
 
 		
 		// get the answer from the database
-		Answer answer = em.find(Answer.class,id);
+		org.anmol.desai.domain.Answer answer = em.find(Answer.class,id);
 
 		if(answer == null){
 			_logger.info("answer is null");

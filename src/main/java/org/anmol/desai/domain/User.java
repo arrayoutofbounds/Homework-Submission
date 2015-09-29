@@ -107,6 +107,10 @@ public abstract class User {
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
+
+	public List<Answer> getAnswers() {
+		return answers;
+	}
 	
 	
 	
