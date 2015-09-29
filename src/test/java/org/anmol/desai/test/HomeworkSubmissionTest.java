@@ -78,7 +78,9 @@ public class HomeworkSubmissionTest  {
 		_client.close();
 	}
 	
-	
+	/**
+	 * Query all users and print list of users received to show result.
+	 */
 	@Test
 	public void queryAllUsers(){
 		List<org.anmol.desai.dto.User> users = _client
@@ -93,6 +95,10 @@ public class HomeworkSubmissionTest  {
 		}
 	}
 	
+	/**
+	 * Get all users. Pick the first one in the list and update it via PUT.
+	 * Then print out the updated and compare them to before updating.
+	 */
 	@Test
 	public void updateUser(){
 		
@@ -126,13 +132,55 @@ public class HomeworkSubmissionTest  {
 		_logger.info("First name is " + returnedUser.getFirstNameUserDto());
 		_logger.info("First name is " + returnedUser.getLastNameUserDto());
 		_logger.info("First name is " + returnedUser.getTypeUserDto());
-		
+			
+	}
 	
+	/**
+	 * Make a user and persist it. Then go and delete that user.
+	 */
+	@Test
+	public void deleteUser(){
+		String firstName = "Jignesh";
+		String lastName = "Desai";
+		String type = "Teacher";
+
+		// first add a student and then a teacher.
+		org.anmol.desai.dto.User teacher = new org.anmol.desai.dto.User(firstName, lastName, type);
+
+		// get a response object that has the result of doing a "POST" method.
+		Response response = _client
+				.target(WEB_SERVICE_URI +"/Users").request()
+				.post(Entity.xml(teacher));
+
+		// if response is successful in posting then a 201 is sent back, else there is an error.
+		if (response.getStatus() != 201) {
+			fail("Failed to create new User");
+		}
 		
+		_logger.info("User was created successfully");
+
+		// get the location string from the response
+		String location = response.getLocation().toString();
+
+		response.close();
+
+
+		//_logger.info(location);
+		location = WEB_SERVICE_URI + "" +  location.substring(31);
 		
+		_logger.info("The uri to send to check if user was created is " + location);
+		
+		Response r = _client.target(location).request().delete();
+		
+		if (r.getStatus() != 204) {
+			fail("Failed to delete new User");
+		}
+		
+		_logger.info("User was deleted successfully");
 		
 	}
-
+	
+	
 	/**
 	 * This test is most basic. It is adding users to the database. It ALSO tests GET request of a USER.
 	 * Because the generator changes the id every time, a post request has to be done, followed by the needed get request
@@ -155,7 +203,7 @@ public class HomeworkSubmissionTest  {
 
 		// if response is successful in posting then a 201 is sent back, else there is an error.
 		if (response.getStatus() != 201) {
-			fail("Failed to create new Student");
+			fail("Failed to create new User");
 		}
 
 		// get the location string from the response

@@ -12,6 +12,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -66,7 +67,10 @@ public class HomeworkSubmissionResource {
 		return dtoUser;
 	}
 	
-	
+	/**
+	 * Get all users in a list of dtos
+	 * @return
+	 */
 	@GET
 	@Path("/Users")
 	@Produces("application/xml")
@@ -97,7 +101,12 @@ public class HomeworkSubmissionResource {
 		
 		return usersReturned;	
 	}
-
+	
+	/**
+	 * Create a new user
+	 * @param dtoUser
+	 * @return
+	 */
 	@POST
 	@Path("/Users")
 	@Consumes("application/xml")
@@ -136,6 +145,11 @@ public class HomeworkSubmissionResource {
 
 	}
 	
+	/**
+	 * Update a user
+	 * @param dtoUser
+	 * @return
+	 */
 	@PUT
 	@Path("/Users/{id}")
 	@Consumes("application/xml")
@@ -165,6 +179,27 @@ public class HomeworkSubmissionResource {
 		return Response.ok(UserMapper.toDto(userToUpdate)).build();
 		
 	}
+	
+	
+	/**
+	 * Delete a user from the database
+	 * @param id
+	 */
+	@DELETE
+	@Path("/Users/{id}")
+	public void deleteUser(@PathParam("id") long id){
+		EntityManager em = FactoryAndDbInitialisation.getInstance().getFactory().createEntityManager();
+		em.getTransaction().begin();
+		
+		org.anmol.desai.domain.User userToDelete = em.find(org.anmol.desai.domain.User.class, id);
+		
+		em.remove(userToDelete);
+		
+		em.getTransaction().commit();
+
+		em.close();
+	}
+	
 
 
 	
