@@ -48,7 +48,7 @@ public class HomeworkSubmissionTest  {
 	}
 
 
-	// apprentely this code below causes an exception...for SOME GODDAMN REASON
+	// apparently this code below causes an exception...for SOME GODDAMN REASON
 	/**
 	 * Runs before each unit test restore Web service database. This ensures
 	 * that each test is independent; each test runs on a Web service that has
@@ -178,7 +178,27 @@ public class HomeworkSubmissionTest  {
 		
 		_logger.info("User was deleted successfully");
 		
+		r.close();
+		
 	}
+	
+	
+	/**
+	 * This test will add an answer to the list of answers that the user has
+	
+	@Test
+	public void addAnswerForUser(){
+		
+		// get user
+		// create new hw
+		// 
+		
+		// An answer consists of body, user that made the answer, the homework that the answer belongs.
+		Answer(String body, User user, Homework hw)
+		
+	}
+	 */
+	
 	
 	
 	/**
@@ -301,7 +321,44 @@ public class HomeworkSubmissionTest  {
 	}
 
 
-
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	/**
+	 * Following tests are all about getting, posting etc of homwork
+	 */
+	@Test
+	public void getHomeworksForUser(){
+		
+		// get list of hw
+		// then get the first one...who is a student
+		
+		List<org.anmol.desai.dto.User> users = _client
+				.target(WEB_SERVICE_URI +"/Users").request()
+				.accept("application/xml")
+				.get(new GenericType<List<org.anmol.desai.dto.User>>() {
+				});
+		
+		org.anmol.desai.dto.User u = users.get(0);
+		
+		List<org.anmol.desai.dto.Homework> dtoHomeworks = _client.target(WEB_SERVICE_URI + "/Users/" + u.get_id_UserDto() + "/Homeworks").request().accept("application/xml").get(new GenericType<List<org.anmol.desai.dto.Homework>>() {
+		});
+		
+		_logger.info(u.getFirstNameUserDto() + " " + u.getLastNameUserDto() + " has " + dtoHomeworks.size() + " homeworks assigned to them");
+		
+		
+	}
+	
+	
+	
+	
 
 
 }

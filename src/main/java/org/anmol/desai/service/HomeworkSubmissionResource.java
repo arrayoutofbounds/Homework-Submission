@@ -200,8 +200,33 @@ public class HomeworkSubmissionResource {
 		em.close();
 	}
 	
+	
+	/**
+	 * Post to the list of answers for a user
+	 * @param dtoAnswer
+	 * @return
+	 */
+	@POST
+	@Path("/Users/{id}/Answers")
+	@Consumes("application/xml")
+	public void addAnswerToUser(@PathParam("id") long id, org.anmol.desai.dto.Answer dtoAnswer){
+		
+		EntityManager em = FactoryAndDbInitialisation.getInstance().getFactory().createEntityManager();
+		em.getTransaction().begin();
+		
+		//get the user from the id given
+		org.anmol.desai.domain.User user = em.find(org.anmol.desai.domain.User.class,id);
+		
+		// add answer to the user
+		user.addAnswer(AnswerMapper.toDomainModel(dtoAnswer));
+		
+		em.persist(user);
+		
+		em.getTransaction().commit();
 
-
+		em.close();
+		
+	}
 	
 	
 	@POST
@@ -276,6 +301,35 @@ public class HomeworkSubmissionResource {
 
 		return dtoAnswer;
 	}
-
+	
+	
+	
+	
+	/**
+	 * The code under here will have the tests for the hw
+	 */
+	
+	
+	@GET
+	@Path("/Users/{id}/Homeworks")
+	@Produces("application/xml")
+	public List<org.anmol.desai.dto.Homework> getAllHomworksForUser(@PathParam("id") long id){
+		// Get the full Parolee object from the database.
+		EntityManager em = FactoryAndDbInitialisation.getInstance().getFactory().createEntityManager();
+		em.getTransaction().begin();
+		
+		org.anmol.desai.domain.User user = em.find(org.anmol.desai.domain.User.class, id);
+		
+		List<org.anmol.desai.domain.Homework> listHw = user.getHomeworkAssigned();
+		
+		List<org.anmol.desai.dto.Homework> returningHw = new ArrayList<org.anmol.desai.dto.Homework>();
+		
+		for(org.anmol.desai.domain.Homework homework : listHw){
+			returningHw.add(HomeworkMapper.toDto(homework));
+		}
+		
+		return returningHw;
+		
+	}
 
 }
