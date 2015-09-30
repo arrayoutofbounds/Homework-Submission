@@ -538,6 +538,43 @@ public class HomeworkSubmissionTest  {
 		_logger.info(user.toString() + " was assigned " + hw.toString());
 		
 	}
+	
+	@Test
+	public void assignAnswerGivenToUser(){
+		
+		List<org.anmol.desai.dto.User> users = _client
+				.target(WEB_SERVICE_URI +"/Users").request()
+				.accept("application/xml")
+				.get(new GenericType<List<org.anmol.desai.dto.User>>() {
+				});
+		
+		org.anmol.desai.dto.User user = users.get(0);
+		
+		// get all the hwks that the user has assigned to itself already.
+		List<org.anmol.desai.dto.Homework> hwks = _client
+				.target(WEB_SERVICE_URI +"/Users/" + user.get_id_UserDto() + "/Homeworks").request()
+				.accept("application/xml")
+				.get(new GenericType<List<org.anmol.desai.dto.Homework>>() {
+				});
+		
+		// assuming the first user has atleast one homework assigned to it
+		org.anmol.desai.dto.Homework hw = hwks.get(0);
+		
+		String body = "This is the answer assigned";
+		
+		org.anmol.desai.dto.Answer a = new org.anmol.desai.dto.Answer(body, user, hw);
+		
+		Response response = _client.target(WEB_SERVICE_URI + "/Users/" + user.get_id_UserDto() +"/Answers").request()
+				.post(Entity.xml(a));
+		
+		if (response.getStatus() != 201)
+			fail("Failed to assign Answer to user");
+		
+		response.close();
+		
+		_logger.info(a.toString() + " was assigned " + user.toString() + " for " + hw.toString());
+
+	}
 
 
 }

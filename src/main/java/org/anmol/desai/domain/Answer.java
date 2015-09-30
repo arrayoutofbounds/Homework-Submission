@@ -20,11 +20,11 @@ public class Answer {
 	//@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long _id;
 	
-	@Column(nullable = false) // this prevents the answer being stored from being empty, and occupying space in db.
+	@Column(nullable = true) // this prevents the answer being stored from being empty, and occupying space in db.
 	protected String body;
 	
 	// if answer is deleted, then its row is gone. But user does not have to be deleted
-	@ManyToOne(fetch = FetchType.EAGER) // this loads the answer object only and not the associated user student.
+	@ManyToOne(fetch = FetchType.EAGER,cascade = CascadeType.PERSIST) // this loads the answer object only and not the associated user student.
 	@JoinColumn(name="USER_ID",nullable=false)
 	protected User user;
 	

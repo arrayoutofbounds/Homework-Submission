@@ -1,4 +1,4 @@
-create table Answer (_id bigint not null, body varchar(255) not null, HOMEWORK_ID bigint not null, USER_ID bigint not null, primary key (_id))
+create table Answer (_id bigint not null, body varchar(255), HOMEWORK_ID bigint not null, USER_ID bigint not null, primary key (_id))
 create table Homework (_id bigint not null, duedate timestamp, question varchar(255) not null, title varchar(255) not null, primary key (_id))
 create table Homwork_Assigned (USER_ID bigint not null, HOMEWORK_ID bigint not null)
 create table Student (Type varchar(255), _id bigint not null, primary key (_id))

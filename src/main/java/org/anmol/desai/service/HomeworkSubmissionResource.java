@@ -213,7 +213,7 @@ public class HomeworkSubmissionResource {
 	@POST
 	@Path("/Users/{id}/Answers")
 	@Consumes("application/xml")
-	public void addAnswerToUser(@PathParam("id") long id, org.anmol.desai.dto.Answer dtoAnswer){
+	public Response addAnswerToUser(@PathParam("id") long id, org.anmol.desai.dto.Answer dtoAnswer){
 		
 		EntityManager em = FactoryAndDbInitialisation.getInstance().getFactory().createEntityManager();
 		em.getTransaction().begin();
@@ -224,11 +224,14 @@ public class HomeworkSubmissionResource {
 		// add answer to the user
 		user.addAnswer(AnswerMapper.toDomainModel(dtoAnswer));
 		
+		// user already exists
 		em.persist(user);
 		
 		em.getTransaction().commit();
 
 		em.close();
+		
+		return Response.status(201).build();
 		
 	}
 	
