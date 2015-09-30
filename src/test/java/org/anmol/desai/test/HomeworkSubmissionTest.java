@@ -3,6 +3,7 @@ package org.anmol.desai.test;
 import static org.junit.Assert.*;
 
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -260,22 +261,25 @@ public class HomeworkSubmissionTest  {
 	@Test
 	public void postAndQueryAnswer(){
 
-		_logger.info("Make a answer and post it so it can be queried. Answer consists of string, user, homework");
-
+		//_logger.info("Make a answer and post it so it can be queried. Answer consists of string, user, homework");
+		
+		_logger.info("Make dto User");
 		String firstName = "Ian";
 		String lastName = "Warren";
 		String type = "Teacher";
 
 		// first add a student and then a teacher.
 		org.anmol.desai.dto.User teacher = new org.anmol.desai.dto.User(firstName, lastName, type);
-
+		
+		_logger.info("Make dto Homework");
 		String title = "Assignment 2";
 		String question = "What course is this?";
 		java.util.Date duedate = new java.util.Date();
 
 		// make a dto homework
 		org.anmol.desai.dto.Homework hw = new org.anmol.desai.dto.Homework( title,  question, duedate);
-
+		
+		_logger.info("Make dto Answer");
 		String body = "this is 325";
 
 		org.anmol.desai.dto.Answer answer = new org.anmol.desai.dto.Answer(body, teacher, hw);
@@ -289,6 +293,8 @@ public class HomeworkSubmissionTest  {
 		if (response.getStatus() != 201) {
 			fail("Failed to create new Answer");
 		}
+		
+		_logger.info("Answer was posted successfully");
 
 		// get the location string from the response
 		String location = response.getLocation().toString();
@@ -298,7 +304,7 @@ public class HomeworkSubmissionTest  {
 
 		//_logger.info(location);
 		location = WEB_SERVICE_URI + "" +  location.substring(31);
-		_logger.info("The uri to send to check if user was created is " + location);
+		_logger.info("The uri to send to check if Answer was created is " + location);
 
 
 
@@ -317,7 +323,7 @@ public class HomeworkSubmissionTest  {
 		assertEquals(answer.getHw().getQuestion(),receivedAnswer.getHw().getQuestion());
 		assertEquals(answer.getHw().getDuedate().getTime(),receivedAnswer.getHw().getDuedate().getTime());
 		
-		_logger.info("All tests passed. Body, User and Homework are the same");
+		_logger.info("All tests passed. Post and get of answer was successful");
 	}
 
 
@@ -356,6 +362,47 @@ public class HomeworkSubmissionTest  {
 		
 	}
 	
+	
+	@Test
+	public void postAndQueryHomework(){
+		
+		String title = "Assignment 4";
+		String question = "What is Assignment 4?";
+		java.util.Date duedate = new Date();
+		
+		org.anmol.desai.dto.Homework dtoHw = new org.anmol.desai.dto.Homework(title, question, duedate);
+		
+		Response response = _client
+				.target(WEB_SERVICE_URI + "/Homeworks").request()
+				.post(Entity.xml(dtoHw));
+		if (response.getStatus() != 201) {
+			fail("Failed to create new Homewprk");
+		}
+		
+		String location = response.getLocation().toString();
+		
+		response.close();
+		
+		
+
+		//_logger.info(location);
+		location = WEB_SERVICE_URI + "" +  location.substring(31);
+		_logger.info("The uri to send to check if Homework was created is " + location);
+		
+		
+		org.anmol.desai.dto.Homework receivedHomework = _client.target(location).request().accept("application/xml").get(org.anmol.desai.dto.Homework.class);
+		
+		
+		assertEquals(dtoHw.getTitle(),receivedHomework.getTitle());
+		assertEquals(dtoHw.getQuestion(),receivedHomework.getQuestion());
+		assertEquals(dtoHw.getDuedate().getTime(),receivedHomework.getDuedate().getTime());
+		
+		_logger.info("All tests passed. Post and get of homework was successful");
+		
+		
+		
+		
+	}
 	
 	
 	

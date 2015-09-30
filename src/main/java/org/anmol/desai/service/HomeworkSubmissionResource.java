@@ -328,8 +328,69 @@ public class HomeworkSubmissionResource {
 			returningHw.add(HomeworkMapper.toDto(homework));
 		}
 		
+		em.getTransaction().commit();
+
+		em.close();
+		
 		return returningHw;
 		
 	}
+	
+	/**
+	 * Create homwork. Homeowork can be created alone and does not need any user or answer
+	 * @return
+	 */
+	@POST
+	@Path("/Homeworks")
+	@Consumes("application/xml")
+	public Response createHomework(org.anmol.desai.dto.Homework dtoHomework){
+		
+		EntityManager em = FactoryAndDbInitialisation.getInstance().getFactory().createEntityManager();
+		em.getTransaction().begin();
+		
+		
+		org.anmol.desai.domain.Homework homework = HomeworkMapper.toDomainModel(dtoHomework);
+		
+		_logger.info("Title is " + homework.getTitle());
+		_logger.info("Question is " + homework.getQuestion());
+		_logger.info("Due date is " + homework.getDuedate());
+		
+		em.persist(homework);
+		em.getTransaction().commit();
 
+		em.close();
+		
+		return Response.created(URI.create("/Homeworks/" + homework.get_id())).build();
+		
+		
+	}
+	
+	
+	@GET
+	@Path("/Homeworks/{id}")
+	@Produces("application/xml")
+	public org.anmol.desai.dto.Homework getHomework(@PathParam("id") long id){
+		
+		EntityManager em = FactoryAndDbInitialisation.getInstance().getFactory().createEntityManager();
+		em.getTransaction().begin();
+		
+		org.anmol.desai.domain.Homework hw = em.find(org.anmol.desai.domain.Homework.class, id);
+		
+		
+		if(hw == null){
+			_logger.info("Homework retrieved is null");
+		}
+		
+		org.anmol.desai.dto.Homework dtoHw = HomeworkMapper.toDto(hw);
+		
+		_logger.info("THe id of the homework returned is " + dtoHw.get_id());
+		
+		em.getTransaction().commit();
+
+		em.close();
+		
+		return dtoHw;	
+	}
+	
+	
 }
