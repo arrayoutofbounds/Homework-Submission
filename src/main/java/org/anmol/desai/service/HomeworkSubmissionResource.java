@@ -233,7 +233,7 @@ public class HomeworkSubmissionResource {
 	}
 	
 	/**
-	 * This method creates an answer
+	 * This method creates an answer and returns a location string that has uri of that new answer.
 	 * @param dtoAnswer
 	 * @return
 	 */
@@ -355,6 +355,26 @@ public class HomeworkSubmissionResource {
 		return dtoAnswer;
 	}
 	
+	/**
+	 * This method deletes a answer
+	 * @param id
+	 */
+	@DELETE
+	@Path("/Answers/{id}")
+	public void deleteAnswer(@PathParam("id") long id){
+		EntityManager em = FactoryAndDbInitialisation.getInstance().getFactory().createEntityManager();
+
+		em.getTransaction().begin();
+		
+		org.anmol.desai.domain.Answer answer = em.find(org.anmol.desai.domain.Answer.class,id);
+		_logger.info("Answer to delete is " + answer.get_id());
+		
+		em.remove(answer);
+		em.getTransaction().commit();
+		em.close();
+		
+	}
+	
 	
 	@PUT
 	@Path("/Answers/{id}")
@@ -463,7 +483,7 @@ public class HomeworkSubmissionResource {
 		
 		return dtoHw;	
 	}
-	
+		
 	
 	@GET
 	@Path("/Homeworks")

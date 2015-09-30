@@ -364,6 +364,37 @@ public class HomeworkSubmissionTest  {
 		
 	}
 	
+	
+	@Test
+	public void deleteAnswer(){
+		
+		List<org.anmol.desai.dto.Answer> answers = _client
+				.target(WEB_SERVICE_URI +"/Answers").request()
+				.accept("application/xml")
+				.get(new GenericType<List<org.anmol.desai.dto.Answer>>() {
+				});
+		
+		if(answers.size() >= 1){
+			
+			org.anmol.desai.dto.Answer answer = answers.get(0);
+			
+			Response r = _client.target(WEB_SERVICE_URI + "/Answers/" + answer.get_id()).request().delete();
+			
+			if (r.getStatus() != 204) {
+				fail("Failed to delete new User");
+			}
+			
+			_logger.info("Answer " + answer.toString() + " was deleted successfully");
+			
+			r.close();
+			
+		}else{
+			_logger.info("The list is empty so there is nothing to delete");
+		}
+		
+		
+	}
+	
 	/**
 	 * Following tests are all about getting, posting etc of homwork
 	 */
