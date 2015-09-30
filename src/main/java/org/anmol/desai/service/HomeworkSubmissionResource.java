@@ -396,12 +396,21 @@ public class HomeworkSubmissionResource {
 	}
 	
 	
+	/**
+	 * The tests below a
+	 */
+	
+	
 	
 	/**
 	 * The code under here will have the tests for the hw
 	 */
 	
-	
+	/**
+	 * Get list of homeworks that a user has
+	 * @param id
+	 * @return
+	 */
 	@GET
 	@Path("/Users/{id}/Homeworks")
 	@Produces("application/xml")
@@ -426,6 +435,30 @@ public class HomeworkSubmissionResource {
 		
 		return returningHw;
 		
+	}
+	
+	
+	@POST
+	@Path("Users/{id}/Homeworks")
+	@Consumes("application/xml")
+	public Response assignHomeworkToUser(@PathParam("id") long id, org.anmol.desai.dto.Homework dtoHomework){
+		EntityManager em = FactoryAndDbInitialisation.getInstance().getFactory().createEntityManager();
+		em.getTransaction().begin();
+		
+		org.anmol.desai.domain.User user = em.find(org.anmol.desai.domain.User.class, id);
+		
+		if(user.getHomeworkAssigned().contains(HomeworkMapper.toDomainModel(dtoHomework))){
+			_logger.info("This homework has already been assigned to the chosen user");
+		}else{
+			user.addHomework(HomeworkMapper.toDomainModel(dtoHomework));
+		}
+		
+		em.persist(user);
+		em.getTransaction().commit();
+
+		em.close();
+		
+		return Response.status(201).build();
 	}
 	
 	/**

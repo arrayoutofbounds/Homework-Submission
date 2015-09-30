@@ -384,7 +384,7 @@ public class HomeworkSubmissionTest  {
 				fail("Failed to delete new User");
 			}
 			
-			_logger.info("Answer " + answer.toString() + " was deleted successfully");
+			_logger.info(answer.toString() + " was deleted successfully");
 			
 			r.close();
 			
@@ -503,7 +503,41 @@ public class HomeworkSubmissionTest  {
 		
 	}
 	
-	
+	/**
+	 * add homework to list of homeworks for a user.
+	 */
+	@Test
+	public void assignHomeworkToUser(){
+		
+		
+		List<org.anmol.desai.dto.User> users = _client
+				.target(WEB_SERVICE_URI +"/Users").request()
+				.accept("application/xml")
+				.get(new GenericType<List<org.anmol.desai.dto.User>>() {
+				});
+		
+		org.anmol.desai.dto.User user = users.get(0);
+		
+		List<org.anmol.desai.dto.Homework> hwks = _client
+				.target(WEB_SERVICE_URI +"/Homeworks").request()
+				.accept("application/xml")
+				.get(new GenericType<List<org.anmol.desai.dto.Homework>>() {
+				});
+		
+		org.anmol.desai.dto.Homework hw = hwks.get(0);
+		
+		
+		Response response = _client.target(WEB_SERVICE_URI + "/Users/" + user.get_id_UserDto() +"/Homeworks").request()
+				.post(Entity.xml(hw));
+		
+		if (response.getStatus() != 201)
+			fail("Failed to assign Homework to user");
+		
+		response.close();
+		
+		_logger.info(user.toString() + " was assigned " + hw.toString());
+		
+	}
 
 
 }
