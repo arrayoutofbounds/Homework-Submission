@@ -45,7 +45,7 @@ public abstract class User {
 	
 	
 	// each user has a list of homeworks assigned to them
-	@ManyToMany(cascade = CascadeType.PERSIST,fetch=FetchType.EAGER)
+	@ManyToMany(cascade = {CascadeType.PERSIST,CascadeType.REMOVE},fetch=FetchType.EAGER)
 	@JoinTable(
 			name="Homwork_Assigned", 
 			joinColumns = @JoinColumn(name = "USER_ID"),

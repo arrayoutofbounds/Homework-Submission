@@ -182,25 +182,7 @@ public class HomeworkSubmissionTest  {
 		r.close();
 		
 	}
-	
-	
-	/**
-	 * This test will add an answer to the list of answers that the user has
-	
-	@Test
-	public void addAnswerForUser(){
 		
-		// get user
-		// create new hw
-		// 
-		
-		// An answer consists of body, user that made the answer, the homework that the answer belongs.
-		Answer(String body, User user, Homework hw)
-		
-	}
-	 */
-	
-	
 	
 	/**
 	 * This test is most basic. It is adding users to the database. It ALSO tests GET request of a USER.
@@ -251,11 +233,35 @@ public class HomeworkSubmissionTest  {
 		_logger.info("All tests passed. Name and type are the same as created");
 	}
 
-
-
+	
+	/**
+	 * The tests below are for Answers
+	 */
+	
+	/**
+	 * This gets all answers
+	 */
+	@Test
+	public void getAllAnswers(){
+		
+		List<org.anmol.desai.dto.Answer> answers = _client
+				.target(WEB_SERVICE_URI +"/Answers").request()
+				.accept("application/xml")
+				.get(new GenericType<List<org.anmol.desai.dto.Answer>>() {
+				});
+		
+		for(org.anmol.desai.dto.Answer a : answers){
+			_logger.info(a.toString());
+		}
+		
+	}
+	
 
 	/**
 	 * This tests sends an dto of Answer to the server and receives a dto. Then the content of the answer is printed out.
+	 * 
+	 * GET and POST of answer is tested.
+	 * 
 	 * @throws SQLException 
 	 */
 	@Test
@@ -326,16 +332,37 @@ public class HomeworkSubmissionTest  {
 		_logger.info("All tests passed. Post and get of answer was successful");
 	}
 
-
 	
-	
-	
-	
-	
-	
-	
-	
-	
+	/**
+	 * This is about updating the answer
+	 */
+	@Test
+	public void updateAnswer(){
+		List<org.anmol.desai.dto.Answer> answers = _client
+				.target(WEB_SERVICE_URI +"/Answers").request()
+				.accept("application/xml")
+				.get(new GenericType<List<org.anmol.desai.dto.Answer>>() {
+				});
+		
+		org.anmol.desai.dto.Answer answer = answers.get(0);
+		
+		_logger.info("Before update " + answer.toString());
+		
+		answer.setBody("Changing this answer body");
+		
+		Response response = _client.target(WEB_SERVICE_URI + "/Answers/" + answer.get_id()).request()
+				.put(Entity.xml(answer));
+		
+		if (response.getStatus() != 200)
+			fail("Failed to update Answer");
+		
+		org.anmol.desai.dto.Answer returnedAnswer = response.readEntity(org.anmol.desai.dto.Answer.class);
+		
+		response.close();
+		
+		_logger.info("After update " + returnedAnswer.toString());
+		
+	}
 	
 	/**
 	 * Following tests are all about getting, posting etc of homwork
@@ -362,7 +389,9 @@ public class HomeworkSubmissionTest  {
 		
 	}
 	
-	
+	/**
+	 * POST and GET of homework is tested. Homework made does not have answer. This shows that it is independent.
+	 */
 	@Test
 	public void postAndQueryHomework(){
 		
@@ -409,6 +438,7 @@ public class HomeworkSubmissionTest  {
 	@Test
 	public void updateHomework(){
 		
+		// GET ALL HOMEWORKS IS USED
 		List<org.anmol.desai.dto.Homework> hwks = _client
 				.target(WEB_SERVICE_URI +"/Homeworks").request()
 				.accept("application/xml")

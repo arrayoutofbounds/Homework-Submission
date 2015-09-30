@@ -202,6 +202,9 @@ public class HomeworkSubmissionResource {
 	}
 	
 	
+	// all the test for answers are after this
+	
+	
 	/**
 	 * Post to the list of answers for a user
 	 * @param dtoAnswer
@@ -229,7 +232,11 @@ public class HomeworkSubmissionResource {
 		
 	}
 	
-	
+	/**
+	 * This method creates an answer
+	 * @param dtoAnswer
+	 * @return
+	 */
 	@POST
 	@Path("/Answers")
 	@Consumes("application/xml")
@@ -268,8 +275,53 @@ public class HomeworkSubmissionResource {
 
 	}
 	
+	
+	
+	
+	
+	/**
+	 * This method returns all answers 
+	 * @return
+	 */
+	@GET
+	@Path("/Answers")
+	@Produces("application/xml")
+	public List<org.anmol.desai.dto.Answer> getAllAnswers(){
+		
+		EntityManager em = FactoryAndDbInitialisation.getInstance().getFactory().createEntityManager();
+		em.getTransaction().begin();
+		
+		_logger.info("Create list of domain objects and another list for dto to be returned");
+		List<org.anmol.desai.domain.Answer> allAnswers = new ArrayList<org.anmol.desai.domain.Answer>();
+		
+		List<org.anmol.desai.dto.Answer> answersReturned = new ArrayList<org.anmol.desai.dto.Answer>();
+		
+		allAnswers = em.createQuery("select u FROM Answer u").getResultList(); // for table name, user the name of the domain class.
+		
+		em.getTransaction().commit();
 
+		em.close();
+		
+		if(allAnswers == null){
+			_logger.info("No answers are in the database");
+		}else{
+			for(org.anmol.desai.domain.Answer a : allAnswers){
+				answersReturned.add(AnswerMapper.toDto(a));
+			}
+		}
+		
+		return answersReturned;	
+		
 
+		
+	}
+
+	
+	/**
+	 * This method returns one answer for the given id in uri.
+	 * @param id
+	 * @return
+	 */
 	@GET
 	@Path("/Answers/{id}")
 	@Produces("application/xml")
@@ -303,6 +355,25 @@ public class HomeworkSubmissionResource {
 		return dtoAnswer;
 	}
 	
+	
+	@PUT
+	@Path("/Answers/{id}")
+	@Consumes("application/xml")
+	@Produces("application/xml")
+	public Response updateAnswer(org.anmol.desai.dto.Answer dtoAnswer ){
+		EntityManager em = FactoryAndDbInitialisation.getInstance().getFactory().createEntityManager();
+		em.getTransaction().begin();
+		
+		org.anmol.desai.domain.Answer answer = em.find(org.anmol.desai.domain.Answer.class, dtoAnswer.get_id());
+		
+		answer.setBody(dtoAnswer.getBody());
+		
+		em.merge(answer);
+		em.getTransaction().commit();
+		em.close();
+		
+		return Response.ok(AnswerMapper.toDto(answer)).build();
+	}
 	
 	
 	

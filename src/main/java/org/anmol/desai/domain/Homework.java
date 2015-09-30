@@ -3,6 +3,7 @@ package org.anmol.desai.domain;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -15,6 +16,7 @@ import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.annotation.XmlTransient;
 
 import org.eclipse.persistence.oxm.annotations.XmlInverseReference;
+import org.hibernate.annotations.Cascade;
 
 @Entity
 public class Homework {
@@ -32,8 +34,8 @@ public class Homework {
 	@Temporal(TemporalType.TIMESTAMP)
 	private java.util.Date duedate;
 	
-	 // each homework has a list of users it is assigned to 
-	@ManyToMany(mappedBy = "homeworkAssigned",fetch = FetchType.EAGER)
+	 // each homework has a list of users it is assigned to it. If homework is persisted, then it may not be that the user is also persisted/
+	@ManyToMany(mappedBy = "homeworkAssigned",fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST,CascadeType.REMOVE})
 	//@XmlTransient
 	private List<User> usersAssigned = new ArrayList<User>();
 	
