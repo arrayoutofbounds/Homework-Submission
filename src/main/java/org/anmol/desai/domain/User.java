@@ -40,7 +40,7 @@ public abstract class User {
 	private String lastName;
 	
 	// if the user is deleted then all the answers it had are also deleted. (makes sense if someone graduates their class, you can remove them from the user db and remove their answers)
-	@OneToMany(mappedBy="user",fetch=FetchType.LAZY,cascade = {CascadeType.PERSIST,CascadeType.REMOVE}) // cascade means that if user is persisted then so is the answer that belongs to that user
+	@OneToMany(mappedBy="user",fetch=FetchType.LAZY,cascade = {CascadeType.PERSIST,CascadeType.REMOVE}) // cascade means that if user is persisted then so is the list of answers that belongs to that user
 	private List<Answer> answers = new ArrayList<Answer>();  // this has a list of answers and hence the user knows about all its answers.
 	
 	

@@ -23,10 +23,12 @@ public class Answer {
 	@Column(nullable = false) // this prevents the answer being stored from being empty, and occupying space in db.
 	protected String body;
 	
+	// if answer is deleted, then its row is gone. But user does not have to be deleted
 	@ManyToOne(fetch = FetchType.EAGER) // this loads the answer object only and not the associated user student.
 	@JoinColumn(name="USER_ID",nullable=false)
 	protected User user;
 	
+	// when answer is saved then so is the homework that is has. But the homework does not have to be deleted.
 	@OneToOne (optional = false, cascade = CascadeType.PERSIST) // answer MUST have a homework assigned. When answer is saved, so is the question.
 	@JoinColumn(name="HOMEWORK_ID",nullable=false)
 	protected Homework hw;

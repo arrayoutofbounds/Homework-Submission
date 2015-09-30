@@ -191,6 +191,7 @@ public class HomeworkSubmissionResource {
 		EntityManager em = FactoryAndDbInitialisation.getInstance().getFactory().createEntityManager();
 		em.getTransaction().begin();
 		
+		_logger.info("Find the user to delete");
 		org.anmol.desai.domain.User userToDelete = em.find(org.anmol.desai.domain.User.class, id);
 		
 		em.remove(userToDelete);
@@ -392,5 +393,72 @@ public class HomeworkSubmissionResource {
 		return dtoHw;	
 	}
 	
+	
+	@GET
+	@Path("/Homeworks")
+	@Produces("application/xml")
+	public List<org.anmol.desai.dto.Homework> getAllHomeworks(){
+		
+		EntityManager em = FactoryAndDbInitialisation.getInstance().getFactory().createEntityManager();
+
+		em.getTransaction().begin();
+		
+		// create list
+		List<org.anmol.desai.domain.Homework> allHw = new ArrayList<org.anmol.desai.domain.Homework>();
+		
+		List<org.anmol.desai.dto.Homework> hwReturned = new ArrayList<org.anmol.desai.dto.Homework>();
+		
+		allHw = em.createQuery("select u FROM Homework u").getResultList(); // for table name, user the name of the domain class.
+		
+		em.getTransaction().commit();
+
+		em.close();
+		
+		if(allHw == null){
+			_logger.info("No users are in the database");
+		}else{
+			for(org.anmol.desai.domain.Homework hw : allHw){
+				hwReturned.add(HomeworkMapper.toDto(hw));
+			}
+		}
+		
+		return hwReturned;	
+	}
+	
+	
+	/**
+	 * Update a Homework
+	 * @param dtoHomework
+	 * @return
+	 */
+	@PUT
+	@Path("/Homeworks/{id}")
+	@Consumes("application/xml")
+	@Produces("application/xml")
+	public Response updateHomework(org.anmol.desai.dto.Homework dtoHomework){
+		
+		EntityManager em = FactoryAndDbInitialisation.getInstance().getFactory().createEntityManager();
+		em.getTransaction().begin();
+		
+		// pass in the table of the domain class you want to look in and the id .
+		// User is a super class table, so just look in there with the id of the dto
+		org.anmol.desai.domain.Homework hwToUpdate = em.find(org.anmol.desai.domain.Homework.class, dtoHomework.get_id());
+		
+		if(hwToUpdate == null){
+			_logger.info("homework to update is null");
+		}
+		
+		hwToUpdate.setQuestion(dtoHomework.getQuestion());
+		hwToUpdate.setTitle(dtoHomework.getTitle());
+		
+		em.merge(hwToUpdate);
+	
+		em.getTransaction().commit();
+
+		em.close();
+		
+		return Response.ok(HomeworkMapper.toDto(hwToUpdate)).build();
+		
+	}
 	
 }

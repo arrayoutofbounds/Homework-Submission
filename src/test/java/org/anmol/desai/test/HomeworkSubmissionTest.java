@@ -400,10 +400,47 @@ public class HomeworkSubmissionTest  {
 		_logger.info("All tests passed. Post and get of homework was successful");
 		
 		
+	}
+	
+	
+	/**
+	 * This test will update the homework
+	 */
+	@Test
+	public void updateHomework(){
+		
+		List<org.anmol.desai.dto.Homework> hwks = _client
+				.target(WEB_SERVICE_URI +"/Homeworks").request()
+				.accept("application/xml")
+				.get(new GenericType<List<org.anmol.desai.dto.Homework>>() {
+				});
+		
+		org.anmol.desai.dto.Homework hw = hwks.get(0);
+		
+		_logger.info("Before:");
+		_logger.info("" + hw.getTitle());
+		_logger.info("" + hw.getQuestion());
+		_logger.info("" + hw.getDuedate());
+		
+		hw.setQuestion("This question has been edited");
+		hw.setTitle("This title has been edited");
+		
+		Response response = _client.target(WEB_SERVICE_URI + "/Homeworks/" + hw.get_id()).request().put(Entity.xml(hw));
+		
+		if (response.getStatus() != 200)
+			fail("Failed to update Homework");
+		
+		org.anmol.desai.dto.Homework returnedHw = response.readEntity(org.anmol.desai.dto.Homework.class);
+		
+		response.close();
+		
+		_logger.info("After update: ");
+		_logger.info("" + returnedHw.getQuestion());
+		_logger.info("" + returnedHw.getTitle());
+		_logger.info("" + returnedHw.getDuedate());
 		
 		
 	}
-	
 	
 	
 
