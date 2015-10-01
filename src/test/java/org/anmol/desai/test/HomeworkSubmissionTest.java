@@ -2,6 +2,7 @@ package org.anmol.desai.test;
 
 import static org.junit.Assert.*;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -30,6 +31,9 @@ import org.anmol.desai.domain.Student;
 import org.anmol.desai.domain.Teacher;
 import org.anmol.desai.domain.User;
 import org.anmol.desai.service.FactoryAndDbInitialisation;
+import org.apache.http.HttpEntity;
+import org.apache.http.ParseException;
+import org.apache.http.util.EntityUtils;
 import org.eclipse.persistence.jaxb.MarshallerProperties;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -700,6 +704,16 @@ public class HomeworkSubmissionTest  {
 
 		_logger.info("All tests passed. Post and get of JSON homework was successful");
 
+	}
+	
+	
+	@Test
+	public void getHtml() throws ParseException, IOException{
+		
+		String html = _client.target(WEB_SERVICE_URI + "/webpage").request().accept("text/html").get(String.class);
+	
+		_logger.info(html);
+		
 	}
 
 

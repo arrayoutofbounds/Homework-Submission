@@ -25,6 +25,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.container.AsyncResponse;
 import javax.ws.rs.container.Suspended;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
@@ -682,9 +683,9 @@ public class HomeworkSubmissionResource {
 				em.getTransaction().commit();
 
 				em.close();
-				
+
 				org.anmol.desai.dto.User u = null;
-				
+
 				for(org.anmol.desai.domain.User user : allUsers){
 					if(user.getFirstName().equals("Bapa") && user.getLastName().equals("Bapa")){
 						u = UserMapper.toDto(user);
@@ -696,9 +697,9 @@ public class HomeworkSubmissionResource {
 
 
 	}
-	
-	
-	
+
+
+
 	/**
 	 * 
 	 * @return
@@ -709,23 +710,23 @@ public class HomeworkSubmissionResource {
 	@Produces("application/json")
 	public Response postHomeworkJsoncreateHomework(org.anmol.desai.dto.Homework dtoHomework){
 
-			EntityManager em = FactoryAndDbInitialisation.getInstance().getFactory().createEntityManager();
-			em.getTransaction().begin();
+		EntityManager em = FactoryAndDbInitialisation.getInstance().getFactory().createEntityManager();
+		em.getTransaction().begin();
 
-			org.anmol.desai.domain.Homework homework = HomeworkMapper.toDomainModel(dtoHomework);
+		org.anmol.desai.domain.Homework homework = HomeworkMapper.toDomainModel(dtoHomework);
 
-			_logger.info("Title is " + homework.getTitle());
-			_logger.info("Question is " + homework.getQuestion());
-			_logger.info("Due date is " + homework.getDuedate());
+		_logger.info("Title is " + homework.getTitle());
+		_logger.info("Question is " + homework.getQuestion());
+		_logger.info("Due date is " + homework.getDuedate());
 
-			em.persist(homework);
-			em.getTransaction().commit();
+		em.persist(homework);
+		em.getTransaction().commit();
 
-			em.close();
+		em.close();
 
-			return Response.created(URI.create("/Homeworks/" + homework.get_id())).build();
+		return Response.created(URI.create("/Homeworks/" + homework.get_id())).build();
 	}
-	
+
 	@GET
 	@Path("/Homeworks/{id}/json")
 	@Produces("application/json")
@@ -751,8 +752,63 @@ public class HomeworkSubmissionResource {
 
 		return dtoHw;	
 	}
-	
-	
-	
+
+	@GET
+	@Path("/webpage")
+	@Produces(MediaType.TEXT_HTML)
+	public String returnWebpage(){
+		
+		EntityManager em = FactoryAndDbInitialisation.getInstance().getFactory().createEntityManager();
+
+		em.getTransaction().begin();
+
+		// create list
+		List<org.anmol.desai.domain.Homework> allHw = new ArrayList<org.anmol.desai.domain.Homework>();
+
+		List<org.anmol.desai.dto.Homework> hwReturned = new ArrayList<org.anmol.desai.dto.Homework>();
+
+		allHw = em.createQuery("select u FROM Homework u").getResultList(); // for table name, user the name of the domain class.
+
+		em.getTransaction().commit();
+
+		em.close();
+
+		if(allHw == null){
+			_logger.info("No users are in the database");
+		}else{
+			for(org.anmol.desai.domain.Homework hw : allHw){
+				hwReturned.add(HomeworkMapper.toDto(hw));
+			}
+		}
+		
+		
+
+		return toHtmlFormat(hwReturned);
+
+
+	}
+
+	private String toHtmlFormat(List<org.anmol.desai.dto.Homework> hwks){
+		
+		StringBuffer buffer = new StringBuffer();
+		
+		buffer.append("\n");
+		buffer.append("<!DOCTYPE html> \n");
+		buffer.append("<html> \n");
+		buffer.append("<head></head> \n");
+		buffer.append("<body> \n");
+		buffer.append("<h1>Homework</h1> \n");
+		
+		for(org.anmol.desai.dto.Homework hw : hwks){
+		
+			buffer.append("<p> Title :" + hw.getTitle() + " Question: " + hw.getQuestion() + "</p> \n" );
+		}
+		
+		buffer.append("</body> \n");
+		buffer.append("</html> \n");
+		
+		return buffer.toString();
+	}
+
 
 }
