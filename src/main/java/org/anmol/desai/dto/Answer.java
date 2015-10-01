@@ -134,12 +134,12 @@ public class Answer {
 		}
 
 		if(!links.isEmpty()){
-			buffer.append("Links: {");
+			buffer.append(" Links: {");
 			for(Link l : links){
 				buffer.append("{");
 				buffer.append(l.getLink() + ",");
 				buffer.append(l.getRel());
-				buffer.append(" }");
+				buffer.append(" },");
 			}
 			buffer.append(" }");
 		}

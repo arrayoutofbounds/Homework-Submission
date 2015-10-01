@@ -3,9 +3,14 @@ package org.anmol.desai.test;
 import static org.junit.Assert.*;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.GenericType;
@@ -354,7 +359,7 @@ public class HomeworkSubmissionTest  {
 		response.close();
 
 
-		//_logger.info(location);
+		//_logger.info("LOCATION IS " +location);
 		location = WEB_SERVICE_URI + "" +  location.substring(31);
 		_logger.info("The uri to send to check if Answer was created is " + location);
 
@@ -622,6 +627,37 @@ public class HomeworkSubmissionTest  {
 
 		_logger.info(a.toString() + " was assigned " + user.toString() + " for " + hw.toString());
 
+	}
+	
+	/**
+	 * This method does 2 get requests to users 
+	 */
+	@Test
+	public void testAsync(){
+		
+		Client client = ClientBuilder.newClient();
+		
+		_logger.info("Make the first future object");
+		Future<org.anmol.desai.dto.User> future1 = client.target(WEB_SERVICE_URI + "/Users/async").request().async().get(org.anmol.desai.dto.User.class);
+		
+		org.anmol.desai.dto.User f1 = null;
+		
+		try {
+			 f1 = future1.get();
+		}catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+
+		
+		_logger.info("Async works.");
+		_logger.info("User received using async is " + f1.toString());
+		client.close();
+		
 	}
 
 
