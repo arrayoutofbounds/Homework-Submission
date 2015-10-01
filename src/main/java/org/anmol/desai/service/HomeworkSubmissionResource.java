@@ -14,6 +14,7 @@ import javax.persistence.Persistence;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -148,14 +149,17 @@ public class HomeworkSubmissionResource {
 	@POST
 	@Path("/Users")
 	@Consumes("application/xml")
-	public Response createUser(org.anmol.desai.dto.User dtoUser){
+	public Response createUser(org.anmol.desai.dto.User dtoUser, @HeaderParam("passwd") int value){
 
 		EntityManager em = FactoryAndDbInitialisation.getInstance().getFactory().createEntityManager();
 		em.getTransaction().begin();
-
+		
+		_logger.info("hashed value of password is " + value);
+		
 		// reading the user
 		_logger.info("Read User: " + dtoUser);
 		_logger.info("type of user to be created is " + dtoUser.getTypeUserDto());
+		
 
 		org.anmol.desai.domain.User user = UserMapper.toDomainModel(dtoUser);
 

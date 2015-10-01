@@ -244,8 +244,9 @@ public class HomeworkSubmissionTest  {
 		org.anmol.desai.dto.User student = new org.anmol.desai.dto.User(firstName, lastName, type);
 
 		// get a response object that has the result of doing a "POST" method.
+		
 		Response response = _client
-				.target(WEB_SERVICE_URI +"/Users").request()
+				.target(WEB_SERVICE_URI +"/Users").request().header("passwd",("value").hashCode())
 				.post(Entity.xml(student));
 
 		// if response is successful in posting then a 201 is sent back, else there is an error.
