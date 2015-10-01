@@ -96,6 +96,45 @@ public class HomeworkSubmissionTest  {
 		}
 	}
 	
+	@Test
+	public void queryUsersWithPaginationAndFiltering(){
+		
+		List<org.anmol.desai.dto.User> users = _client
+				.target(WEB_SERVICE_URI +"/Users?" + "typeOfUser=1").request()
+				.accept("application/xml")
+				.get(new GenericType<List<org.anmol.desai.dto.User>>() {
+				});
+		
+		for(org.anmol.desai.dto.User u : users){
+			_logger.info("Only returned student " + u.toString() );
+		}
+		
+		
+		List<org.anmol.desai.dto.User> users2 = _client
+				.target(WEB_SERVICE_URI +"/Users?" + "typeOfUser=2").request()
+				.accept("application/xml")
+				.get(new GenericType<List<org.anmol.desai.dto.User>>() {
+				});
+		
+		for(org.anmol.desai.dto.User u : users2){
+			_logger.info("Only returned teacher " + u.toString() );
+		}
+		
+		List<org.anmol.desai.dto.User> users3 = _client
+				.target(WEB_SERVICE_URI +"/Users?" + "start=0&&size=3").request()
+				.accept("application/xml")
+				.get(new GenericType<List<org.anmol.desai.dto.User>>() {
+				});
+		
+		_logger.info("Start = 0 and Size = 3.");
+		_logger.info("Result will be from index 0 to index 2 inclusive");
+		for(org.anmol.desai.dto.User u : users3){
+			_logger.info(u.toString() );
+		}
+		
+	}
+	
+	
 	/**
 	 * Get all users. Pick the first one in the list and update it via PUT.
 	 * Then print out the updated and compare them to before updating.

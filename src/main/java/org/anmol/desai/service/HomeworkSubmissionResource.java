@@ -19,6 +19,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 
 import org.anmol.desai.domain.Answer;
@@ -73,8 +74,9 @@ public class HomeworkSubmissionResource {
 	 */
 	@GET
 	@Path("/Users")
+	@Consumes("application/xml")
 	@Produces("application/xml")
-	public List<org.anmol.desai.dto.User> getUsers(){
+	public List<org.anmol.desai.dto.User> getUsers(@QueryParam("typeOfUser") int typeOfUser, @QueryParam("start") int start, @QueryParam("size")int size ){
 		
 		EntityManager em = FactoryAndDbInitialisation.getInstance().getFactory().createEntityManager();
 
@@ -99,6 +101,42 @@ public class HomeworkSubmissionResource {
 			}
 		}
 		
+		
+		
+		if(typeOfUser==1){
+			
+			List<org.anmol.desai.dto.User> e = new ArrayList<org.anmol.desai.dto.User>();
+			
+			for(org.anmol.desai.dto.User u : usersReturned){
+				if(u.getTypeUserDto().equals("Student")){
+					e.add(u);
+				}
+			}
+			return e;
+		}
+		
+		if(typeOfUser==2){
+			
+			List<org.anmol.desai.dto.User> e = new ArrayList<org.anmol.desai.dto.User>();
+			
+			for(org.anmol.desai.dto.User u : usersReturned){
+				if(u.getTypeUserDto().equals("Teacher")){
+					e.add(u);
+				}
+			}
+			return e;
+		}
+		
+		// make size > 0 because if not assigned, it automatically becomes 0 and then causes problems
+		if(start >= 0 && size > 0){
+			if(start + size > usersReturned.size()){
+				return new ArrayList<org.anmol.desai.dto.User>();
+			}
+			
+			return usersReturned.subList(start, start + size);
+		}
+		
+		// will only return this if all the if statements above fail or if the clien acutally wants all the users without filtering.
 		return usersReturned;	
 	}
 	
