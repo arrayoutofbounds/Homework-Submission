@@ -246,7 +246,7 @@ public class HomeworkSubmissionTest  {
 		// get a response object that has the result of doing a "POST" method.
 		
 		Response response = _client
-				.target(WEB_SERVICE_URI +"/Users").request().header("passwd",("value").hashCode())
+				.target(WEB_SERVICE_URI +"/Users").request().header("passwd",("value").hashCode()).cookie(new NewCookie("username","darthv"))
 				.post(Entity.xml(student));
 
 		// if response is successful in posting then a 201 is sent back, else there is an error.

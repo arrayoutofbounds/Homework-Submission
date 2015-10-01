@@ -12,6 +12,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.CookieParam;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
@@ -151,13 +152,16 @@ public class HomeworkSubmissionResource {
 	@POST
 	@Path("/Users")
 	@Consumes("application/xml")
-	public Response createUser(org.anmol.desai.dto.User dtoUser, @HeaderParam("passwd") int value){
+	public Response createUser(org.anmol.desai.dto.User dtoUser, @HeaderParam("passwd") int value, @CookieParam("username") String username){
 
 		EntityManager em = FactoryAndDbInitialisation.getInstance().getFactory().createEntityManager();
 		em.getTransaction().begin();
 		
-		_logger.info("hashed value of password is " + value);
+		if(value != 0){
+			_logger.info("hashed value of password is " + value);
+		}
 		
+		_logger.info("The cookie gave the username as " + username);
 		// reading the user
 		_logger.info("Read User: " + dtoUser);
 		_logger.info("type of user to be created is " + dtoUser.getTypeUserDto());
