@@ -162,6 +162,7 @@ public class HomeworkSubmissionResource {
 		}
 		
 		_logger.info("The cookie gave the username as " + username);
+		
 		// reading the user
 		_logger.info("Read User: " + dtoUser);
 		_logger.info("type of user to be created is " + dtoUser.getTypeUserDto());
@@ -291,13 +292,14 @@ public class HomeworkSubmissionResource {
 	@POST
 	@Path("/Answers")
 	@Consumes("application/xml")
-	public Response createAnswer(org.anmol.desai.dto.Answer dtoAnswer){
+	public Response createAnswer(org.anmol.desai.dto.Answer dtoAnswer, @CookieParam("date") String dateCreated){
 
 		EntityManager em = FactoryAndDbInitialisation.getInstance().getFactory().createEntityManager();
 		em.getTransaction().begin();
 
 		// reading the user
 		_logger.info("Read Answer: " + dtoAnswer);
+		_logger.info("Date created as per cookie is " + dateCreated) ;
 		
 		// make a domain model answer
 		org.anmol.desai.domain.Answer answer = AnswerMapper.toDomainModel(dtoAnswer);

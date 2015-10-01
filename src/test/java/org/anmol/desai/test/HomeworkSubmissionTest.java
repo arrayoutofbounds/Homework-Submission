@@ -338,7 +338,7 @@ public class HomeworkSubmissionTest  {
 
 		// get a response object that has the result of doing a "POST" method.
 		Response response = _client
-				.target(WEB_SERVICE_URI +"/Answers").request()
+				.target(WEB_SERVICE_URI +"/Answers").request().cookie(new NewCookie("date",new Date() + ""))
 				.post(Entity.xml(answer));
 
 		// if response is successful in posting then a 201 is sent back, else there is an error.
