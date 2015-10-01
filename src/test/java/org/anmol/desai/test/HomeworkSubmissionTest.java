@@ -20,6 +20,9 @@ import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 
 import org.anmol.desai.domain.Answer;
 import org.anmol.desai.domain.Homework;
@@ -27,6 +30,7 @@ import org.anmol.desai.domain.Student;
 import org.anmol.desai.domain.Teacher;
 import org.anmol.desai.domain.User;
 import org.anmol.desai.service.FactoryAndDbInitialisation;
+import org.eclipse.persistence.jaxb.MarshallerProperties;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -249,7 +253,7 @@ public class HomeworkSubmissionTest  {
 		org.anmol.desai.dto.User student = new org.anmol.desai.dto.User(firstName, lastName, type);
 
 		// get a response object that has the result of doing a "POST" method.
-		
+
 		Response response = _client
 				.target(WEB_SERVICE_URI +"/Users").request().header("passwd",("value").hashCode()).cookie(new NewCookie("username","darthv"))
 				.post(Entity.xml(student));
@@ -366,9 +370,9 @@ public class HomeworkSubmissionTest  {
 
 
 		org.anmol.desai.dto.Answer receivedAnswer = _client.target(location).request().accept("application/xml").get(org.anmol.desai.dto.Answer.class);
-		
+
 		_logger.info(receivedAnswer.toString());
-		
+
 		_logger.info("before " + duedate);
 		_logger.info("after " + receivedAnswer.getHw().getDuedate());
 
@@ -628,22 +632,22 @@ public class HomeworkSubmissionTest  {
 		_logger.info(a.toString() + " was assigned " + user.toString() + " for " + hw.toString());
 
 	}
-	
+
 	/**
 	 * This method does 2 get requests to users 
 	 */
 	@Test
 	public void testAsync(){
-		
+
 		Client client = ClientBuilder.newClient();
-		
+
 		_logger.info("Make the first future object");
 		Future<org.anmol.desai.dto.User> future1 = client.target(WEB_SERVICE_URI + "/Users/async").request().async().get(org.anmol.desai.dto.User.class);
-		
+
 		org.anmol.desai.dto.User f1 = null;
-		
+
 		try {
-			 f1 = future1.get();
+			f1 = future1.get();
 		}catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -651,14 +655,53 @@ public class HomeworkSubmissionTest  {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
 
-		
+
+
 		_logger.info("Async works.");
 		_logger.info("User received using async is " + f1.toString());
 		client.close();
-		
+
 	}
+
+	@Test
+	public void postHomeworkJson(){
+
+		String title = "JSON";
+		String question = "Does json work?";
+		java.util.Date duedate = new Date();
+
+		org.anmol.desai.dto.Homework dtoHw = new org.anmol.desai.dto.Homework(title, question, duedate);
+
+		Response response = _client
+				.target(WEB_SERVICE_URI + "/Homeworks/json").request().header("Content-Type", "application/json")
+				.post(Entity.json(dtoHw));
+
+
+		if (response.getStatus() != 201) {
+			fail("Failed to create new Homewprk");
+		}
+
+		String location = response.getLocation().toString();
+
+		response.close();
+
+		//_logger.info(location);
+		location = WEB_SERVICE_URI + "" +  location.substring(31);
+		_logger.info("The uri to send to check if JSON Homework was created is " + location);
+
+
+		org.anmol.desai.dto.Homework receivedHomework = _client.target(location + "/json").request().accept("application/json").get(org.anmol.desai.dto.Homework.class);
+
+
+		assertEquals(dtoHw.getTitle(),receivedHomework.getTitle());
+		assertEquals(dtoHw.getQuestion(),receivedHomework.getQuestion());
+		assertEquals(dtoHw.getDuedate().getTime(),receivedHomework.getDuedate().getTime());
+
+		_logger.info("All tests passed. Post and get of JSON homework was successful");
+
+	}
+
 
 
 }
