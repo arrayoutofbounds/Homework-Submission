@@ -333,7 +333,7 @@ public class HomeworkSubmissionResource {
 	@GET
 	@Path("/Answers")
 	@Produces("application/xml")
-	public List<org.anmol.desai.dto.Answer> getAllAnswers(){
+	public List<org.anmol.desai.dto.Answer> getAllAnswers(@Context UriInfo uriInfo){
 		
 		EntityManager em = FactoryAndDbInitialisation.getInstance().getFactory().createEntityManager();
 		em.getTransaction().begin();
@@ -357,13 +357,17 @@ public class HomeworkSubmissionResource {
 			}
 		}
 		
-		
-		return answersReturned;	
-		
-
-		
+		for(org.anmol.desai.dto.Answer dtoAnswer : answersReturned){
+			dtoAnswer.addLink(getUriForUser(uriInfo,dtoAnswer), "User");
+			dtoAnswer.addLink(getUriForSelf(uriInfo,dtoAnswer),"self");
+		}
+		return answersReturned;		
 	}
-
+	
+	private String getUriForUser(UriInfo uriInfo, org.anmol.desai.dto.Answer a){
+		URI uri = uriInfo.getBaseUriBuilder().path(HomeworkSubmissionResource.class).path(HomeworkSubmissionResource.class, "getUser").resolveTemplate("id", a.getHw().get_id()).build();
+		return uri.toString();
+	}
 	
 	/**
 	 * This method returns one answer for the given id in uri.

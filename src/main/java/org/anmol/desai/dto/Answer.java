@@ -107,7 +107,9 @@ public class Answer {
 		Link link = new Link();
 		link.setLink(url);
 		link.setRel(rel);
-		links.add(link);
+		if(!links.contains(link)){
+			links.add(link);
+		}
 	}
 
 	@Override
