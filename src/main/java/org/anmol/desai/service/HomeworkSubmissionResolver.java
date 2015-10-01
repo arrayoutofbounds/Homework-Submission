@@ -4,11 +4,11 @@ import javax.ws.rs.ext.ContextResolver;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 
-import org.anmol.desai.domain.Answer;
-import org.anmol.desai.domain.Homework;
+import org.anmol.desai.dto.Answer;
+import org.anmol.desai.dto.Homework;
 import org.anmol.desai.domain.Student;
 import org.anmol.desai.domain.Teacher;
-import org.anmol.desai.domain.User;
+import org.anmol.desai.dto.User;
 
 /**
  * 

@@ -21,7 +21,9 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 
 import org.anmol.desai.domain.Answer;
 import org.anmol.desai.domain.User;
@@ -355,6 +357,7 @@ public class HomeworkSubmissionResource {
 			}
 		}
 		
+		
 		return answersReturned;	
 		
 
@@ -371,7 +374,7 @@ public class HomeworkSubmissionResource {
 	@Path("/Answers/{id}")
 	@Produces("application/xml")
 	public org.anmol.desai.dto.Answer getAnswer(
-			@PathParam("id") long id) {
+			@PathParam("id") long id, @Context UriInfo uriInfo) {
 		// Get the full Parolee object from the database.
 		EntityManager em = FactoryAndDbInitialisation.getInstance().getFactory().createEntityManager();
 
@@ -396,8 +399,17 @@ public class HomeworkSubmissionResource {
 		em.getTransaction().commit();
 
 		em.close();
+		
+		// add link of itself
+		dtoAnswer.addLink(getUriForSelf(uriInfo,dtoAnswer),"self");
+		
 
 		return dtoAnswer;
+	}
+	
+	private String getUriForSelf(UriInfo uriInfo, org.anmol.desai.dto.Answer a){
+		URI uri = uriInfo.getBaseUriBuilder().path(HomeworkSubmissionResource.class).path(HomeworkSubmissionResource.class, "getAnswer").resolveTemplate("id", a.get_id()).build();
+		return uri.toString();
 	}
 	
 	/**

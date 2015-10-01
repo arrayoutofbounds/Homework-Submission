@@ -254,6 +254,7 @@ public class HomeworkSubmissionTest  {
 			fail("Failed to create new User");
 		}
 
+
 		// get the location string from the response
 		String location = response.getLocation().toString();
 
@@ -360,7 +361,9 @@ public class HomeworkSubmissionTest  {
 
 
 		org.anmol.desai.dto.Answer receivedAnswer = _client.target(location).request().accept("application/xml").get(org.anmol.desai.dto.Answer.class);
-
+		
+		_logger.info(receivedAnswer.toString());
+		
 		_logger.info("before " + duedate);
 		_logger.info("after " + receivedAnswer.getHw().getDuedate());
 

@@ -7,6 +7,10 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementRef;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.xml.bind.annotation.XmlAccessType;
 
 import org.anmol.desai.dto.Homework;
@@ -14,6 +18,7 @@ import org.anmol.desai.dto.User;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.hibernate.mapping.Array;
 
 @XmlRootElement(name="answer")
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -30,6 +35,9 @@ public class Answer {
 
 	@XmlElement(name="homework-question")
 	protected Homework hw;
+	
+	private List<Link> links = new ArrayList<Link>();
+	
 
 	protected Answer(){}
 	
@@ -84,7 +92,23 @@ public class Answer {
 	public void setHw(Homework hw) {
 		this.hw = hw;
 	}
+	
+	
 
+	public List<Link> getLinks() {
+		return links;
+	}
+
+	public void setLinks(List<Link> links) {
+		this.links = links;
+	}
+	
+	public void addLink(String url, String rel){
+		Link link = new Link();
+		link.setLink(url);
+		link.setRel(rel);
+		links.add(link);
+	}
 
 	@Override
 	public String toString() {
@@ -94,20 +118,28 @@ public class Answer {
 		buffer.append(_id);
 		buffer.append("]; ");
 		
-		
 		if(body != null){
 			buffer.append(body);
 			buffer.append(", ");
 		}
-		
 		if(user != null){
 			buffer.append(user.getFirstNameUserDto() + " " + user.getLastNameUserDto());
 			buffer.append(", ");
 		}
-		
 		if(hw != null){
 			buffer.append(hw.getTitle() + "; " + hw.getQuestion());
 			
+		}
+
+		if(!links.isEmpty()){
+			buffer.append("Links: {");
+			for(Link l : links){
+				buffer.append("{");
+				buffer.append(l.getLink() + ",");
+				buffer.append(l.getRel());
+				buffer.append(" }");
+			}
+			buffer.append(" }");
 		}
 		buffer.append(" }");
 		
